@@ -16,7 +16,7 @@ CREATE TABLE project_embeddings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
   content TEXT NOT NULL,
-  embedding vector(2048)
+  embedding vector(384)
 );
 
 CREATE INDEX idx_project_embeddings_project_id ON project_embeddings(project_id);
@@ -34,7 +34,7 @@ CREATE TABLE profile_embeddings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   profile_id UUID NOT NULL REFERENCES profile_content(id) ON DELETE CASCADE,
   content TEXT NOT NULL,
-  embedding vector(2048)
+  embedding vector(384)
 );
 
 CREATE INDEX idx_profile_embeddings_profile_id ON profile_embeddings(profile_id);

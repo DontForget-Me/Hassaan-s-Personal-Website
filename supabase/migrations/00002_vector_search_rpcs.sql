@@ -1,6 +1,6 @@
 -- Match project embeddings by vector similarity
 CREATE OR REPLACE FUNCTION match_project_embeddings(
-  query_embedding vector(2048),
+  query_embedding vector(384),
   match_threshold float,
   match_count int
 )
@@ -28,7 +28,7 @@ $$;
 
 -- Match profile embeddings by vector similarity
 CREATE OR REPLACE FUNCTION match_profile_embeddings(
-  query_embedding vector(2048),
+  query_embedding vector(384),
   match_threshold float,
   match_count int
 )

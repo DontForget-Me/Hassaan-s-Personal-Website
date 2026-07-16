@@ -9,9 +9,9 @@ Agentic AI Portfolio & Admin Platform for Muhammad Hassaan Khan — a Next.js 16
 **High-level architecture:**
 - Public portfolio routes (`/`, `/projects`, `/about`) with an embedded RAG AI assistant
 - Admin routes (`/admin/dashboard`, `/admin/projects`, `/admin/profile`, `/admin/ai-logs`) secured behind Supabase Auth
-- AI assistant pipeline: visitor query → Deepseek Embedding → Supabase Vector retrieval → Deepseek V4 Flash → response
+- AI assistant pipeline: visitor query → Hugging Face embedding (all-MiniLM-L6-v2) → Supabase Vector retrieval → Deepseek V4 Flash → response
 - Rate limiting: 20 messages/IP/hour tracked in `ai_chat_logs` table (not Vercel KV)
-- **Embeddings use Deepseek API** (both LLM + embedding), not OpenAI
+- **Embeddings use Hugging Face Inference API** (free); LLM uses Deepseek V4 Flash
 
 ## Commands
 
