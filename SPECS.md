@@ -35,7 +35,7 @@ The application is split into two distinct routing domains: Public and Admin.
 The embedded AI assistant acts as a knowledgeable representative of the developer.
 
 * **LLM Engine:** **\Deepseek(via Deepseek API , model will be V4 flash model of deepseek)**. Selected for its exceptionally low latency, cost-effectiveness, and strong context window, making it the ideal choice for real-time public chat.
-* **Embedding Model:** **Hugging Face Inference API** (`sentence-transformers/all-MiniLM-L6-v2`). Selected for free and reliable embeddings, outputting vectors at 384 dimensions via the Hugging Face Inference API.
+* **Embedding Model:** **Keyword-based search** (no external API needed). Content is split into chunks and matched by keyword overlap with the query. This works entirely offline with zero cost and no dependencies. Can be upgraded to real vector search later.
 * **Architecture:** Visitor queries are embedded and sent to Supabase Vector to retrieve context from both projects and profile content. The context is passed to Deepseek V4 Flash to generate the final response.
 * **Security & Prompt Injection Defense:** The system prompt explicitly instructs the LLM to ignore any instructions embedded in the user's message (e.g., "ignore previous instructions"). Retrieved context is sanitized to ensure the LLM treats it strictly as data, not as executable commands.
 * **Abuse Protection & Rate Limiting:** 

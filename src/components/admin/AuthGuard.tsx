@@ -1,15 +1,24 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
 
+  const isLoginPage = pathname === '/admin/login';
+
   useEffect(() => {
+    // Login page always renders — no auth check needed
+    if (isLoginPage) {
+      setLoading(false);
+      return;
+    }
+
     const supabase = createClient();
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -32,7 +41,12 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [router]);
+  }, [router, isLoginPage]);
+
+  // Login page: render immediately without auth gate
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
 
   if (loading) {
     return (
