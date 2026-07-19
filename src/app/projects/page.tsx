@@ -1,4 +1,6 @@
 import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
+import ProjectCard from '@/components/ProjectCard';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { Project } from '@/types/database';
 
@@ -19,64 +21,69 @@ export default async function ProjectsPage() {
   return (
     <>
       <Nav />
-      <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900">
-          Projects
-        </h1>
-        <p className="mt-2 text-zinc-600">
-          A selection of projects I&apos;ve built.
-        </p>
+      <main className="flex-1">
+        <section className="relative min-h-screen px-4 pt-28 pb-20 sm:pt-36 sm:pb-28">
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'var(--glow)' }}
+          />
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2">
-          {projects.length === 0 && (
-            <p className="text-zinc-400 col-span-full text-center py-12">
-              Projects coming soon.
-            </p>
-          )}
-
-          {projects.map((project) => (
-            <article
-              key={project.id}
-              className="rounded-xl border border-zinc-200 p-6 hover:border-zinc-300 transition-colors"
-            >
-              <h2 className="font-semibold text-lg text-zinc-900">
-                {project.title}
-              </h2>
-              <p className="mt-2 text-sm text-zinc-600 leading-relaxed line-clamp-3">
-                {project.description}
+          <div className="relative mx-auto max-w-4xl">
+            {/* Header */}
+            <div className="mb-14">
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs"
+                style={{
+                  borderColor: 'var(--accent)',
+                  color: 'var(--accent)',
+                  backgroundColor: 'var(--accent-light)',
+                }}
+              >
+                Portfolio
+              </span>
+              <h1
+                className="mt-4 text-3xl font-light tracking-tight sm:text-4xl lg:text-5xl"
+                style={{ color: 'var(--text-primary)' }}
+              >
+                Projects
+              </h1>
+              <p
+                className="mt-2 text-base"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                A selection of things I&apos;ve built.
               </p>
-              {project.tech_stack && project.tech_stack.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {project.tech_stack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-0.5 text-xs rounded-md bg-zinc-100 text-zinc-600"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {project.github_url && (
-                <a
-                  href={project.github_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-block text-sm text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  View on GitHub &rarr;
-                </a>
-              )}
-            </article>
-          ))}
-        </div>
+            </div>
+
+            {/* Grid */}
+            {projects.length === 0 ? (
+              <div
+                className="flex flex-col items-center justify-center rounded-2xl border py-24"
+                style={{
+                  backgroundColor: 'var(--surface)',
+                  borderColor: 'var(--border)',
+                }}
+              >
+                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                  Projects coming soon.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2">
+                {projects.map((project, index) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    index={index}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
       </main>
 
-      <footer className="border-t border-zinc-200 py-6">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center text-sm text-zinc-500">
-          &copy; {new Date().getFullYear()} Muhammad Hassaan Khan
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }

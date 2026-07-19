@@ -7,11 +7,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Agentic AI Portfolio & Admin Platform for Muhammad Hassaan Khan — a Next.js 16 (App Router) + TypeScript application with Supabase (PostgreSQL + Auth + pgvector) and a Deepseek V4 Flash AI assistant (RAG-based). Built using Spec-Driven Development (SDD); SPECS.md is the source of truth.
 
 **High-level architecture:**
-- Public portfolio routes (`/`, `/projects`, `/about`) with an embedded RAG AI assistant
-- Admin routes (`/admin/dashboard`, `/admin/projects`, `/admin/profile`, `/admin/ai-logs`) secured behind Supabase Auth
+- Public portfolio routes (`/`, `/projects`, `/about`, `/services`) with an embedded RAG AI assistant
+- Client portal routes (`/dashboard`, `/dashboard/orders`, `/dashboard/projects`) secured behind Supabase Auth (client role)
+- Admin routes (`/admin/dashboard`, `/admin/projects`, `/admin/profile`, `/admin/ai-logs`, `/admin/orders`) secured behind Supabase Auth (admin role)
 - AI assistant pipeline: visitor query → keyword search on content chunks → Deepseek V4 Flash → response
 - Rate limiting: 20 messages/IP/hour tracked in `ai_chat_logs` table (not Vercel KV)
 - **Keyword-based search** (no external API needed); LLM uses Deepseek V4 Flash
+
+## Project Docs
+- `ROADMAP.md` — Full project roadmap with all phases, features, and goals
+- `STATUS.md` — Current status of what's built vs what's planned
+- `CLAUDE.md` — This file (codebase guide for Claude)
+- `SPECS.md` — Original project specification
 
 ## Commands
 

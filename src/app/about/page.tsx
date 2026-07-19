@@ -1,4 +1,5 @@
 import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { ProfileContent } from '@/types/database';
 
@@ -13,87 +14,136 @@ async function getProfileSections(): Promise<ProfileContent[]> {
   return data ?? [];
 }
 
+const SECTION_LABELS: Record<string, string> = {
+  bio: 'Bio',
+  skills: 'Skills',
+  education: 'Education',
+  experience: 'Experience',
+  certifications: 'Certifications',
+};
+
+const defaultContent: Record<string, string> = {
+  bio: 'I am a full-stack developer and AI engineer with a passion for building intelligent, user-focused applications. I specialize in modern JavaScript/TypeScript ecosystems including React, Next.js, and Node.js, with growing expertise in AI integrations and RAG systems.',
+  skills: 'TypeScript, JavaScript, React, Next.js, Node.js, Python, Supabase, PostgreSQL, Tailwind CSS, Git, REST APIs, AI/ML Integration, RAG Systems',
+  education: 'Details coming soon.',
+  experience: 'Details coming soon.',
+  certifications: 'Details coming soon.',
+};
+
+function renderContent(section: string, content: string) {
+  if (section === 'skills') {
+    const items = content.split(',').map((s) => s.trim()).filter(Boolean);
+    return (
+      <div className="flex flex-wrap gap-2">
+        {items.map((skill) => (
+          <span
+            key={skill}
+            className="rounded-full border px-3.5 py-1.5 text-sm transition-colors"
+            style={{
+              backgroundColor: 'var(--accent-light)',
+              color: 'var(--accent)',
+              borderColor: 'var(--accent)',
+            }}
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <p
+      className="text-base leading-relaxed"
+      style={{ color: 'var(--text-secondary)' }}
+    >
+      {content}
+    </p>
+  );
+}
+
 export default async function AboutPage() {
   const sections = await getProfileSections();
-
-  // Default content for sections that haven't been filled in yet
-  const defaultContent: Record<string, string> = {
-    bio: 'I am a full-stack developer and AI engineer with a passion for building intelligent, user-focused applications. I specialize in modern JavaScript/TypeScript ecosystems including React, Next.js, and Node.js, with growing expertise in AI integrations and RAG systems.',
-    skills: 'TypeScript, JavaScript, React, Next.js, Node.js, Python, Supabase, PostgreSQL, Tailwind CSS, Git, REST APIs, AI/ML Integration, RAG Systems',
-    education: 'Details coming soon.',
-    experience: 'Details coming soon.',
-    certifications: 'Details coming soon.',
-  };
+  const hasData = sections.length > 0;
+  const items = hasData
+    ? sections
+    : Object.entries(defaultContent).map(([section_name, content]) => ({
+        id: section_name,
+        section_name,
+        content,
+        created_at: '',
+      }));
 
   return (
     <>
       <Nav />
-      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900">
-          About
-        </h1>
-        <p className="mt-2 text-zinc-600">
-          Professional background and resume.
-        </p>
+      <main className="flex-1">
+        <section className="relative min-h-screen px-4 pt-28 pb-20 sm:pt-36 sm:pb-28">
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'var(--glow)' }}
+          />
 
-        <div className="mt-10 space-y-8">
-          {sections.length === 0
-            ? Object.entries(defaultContent).map(([section, content]) => (
-                <section key={section}>
-                  <h2 className="text-lg font-semibold text-zinc-900 capitalize mb-3">
-                    {section === 'bio' ? 'Bio' : section.replace('_', ' ')}
-                  </h2>
-                  {section === 'skills' ? (
-                    <div className="flex flex-wrap gap-2">
-                      {content.split(', ').map((skill) => (
-                        <span
-                          key={skill}
-                          className="px-3 py-1 text-sm rounded-full bg-zinc-100 text-zinc-700"
-                        >
-                          {skill}
-                        </span>
-                      ))}
+          <div className="relative mx-auto max-w-3xl">
+            {/* Header */}
+            <div className="mb-14">
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs"
+                style={{
+                  borderColor: 'var(--accent)',
+                  color: 'var(--accent)',
+                  backgroundColor: 'var(--accent-light)',
+                }}
+              >
+                Background
+              </span>
+              <h1
+                className="mt-4 text-3xl font-light tracking-tight sm:text-4xl lg:text-5xl"
+                style={{ color: 'var(--text-primary)' }}
+              >
+                About
+              </h1>
+              <p
+                className="mt-2 text-base"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Professional background and resume.
+              </p>
+            </div>
+
+            {/* Sections */}
+            <div className="space-y-14">
+              {items.map((item, i) => (
+                <section key={item.id}>
+                  <div className="grid gap-3 sm:grid-cols-[140px_1fr] sm:gap-8">
+                    <h2
+                      className="text-xs font-semibold uppercase tracking-[0.15em]"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      {SECTION_LABELS[item.section_name] ?? item.section_name}
+                    </h2>
+                    <div>
+                      {renderContent(item.section_name, item.content)}
                     </div>
-                  ) : (
-                    <p className="text-zinc-600 leading-relaxed whitespace-pre-line">
-                      {content}
-                    </p>
-                  )}
-                </section>
-              ))
-            : sections.map((section) => (
-                <section key={section.id}>
-                  <h2 className="text-lg font-semibold text-zinc-900 capitalize mb-3">
-                    {section.section_name === 'bio'
-                      ? 'Bio'
-                      : section.section_name.replace('_', ' ')}
-                  </h2>
-                  {section.section_name === 'skills' ? (
-                    <div className="flex flex-wrap gap-2">
-                      {section.content.split(',').map((skill) => (
-                        <span
-                          key={skill.trim()}
-                          className="px-3 py-1 text-sm rounded-full bg-zinc-100 text-zinc-700"
-                        >
-                          {skill.trim()}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-zinc-600 leading-relaxed whitespace-pre-line">
-                      {section.content}
-                    </p>
+                  </div>
+                  {/* Separator */}
+                  {i < items.length - 1 && (
+                    <hr
+                      className="mt-10 border-0"
+                      style={{
+                        height: '1px',
+                        background: `linear-gradient(90deg, var(--border) 30%, transparent)`,
+                      }}
+                    />
                   )}
                 </section>
               ))}
-        </div>
+            </div>
+          </div>
+        </section>
       </main>
 
-      <footer className="border-t border-zinc-200 py-6">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center text-sm text-zinc-500">
-          &copy; {new Date().getFullYear()} Muhammad Hassaan Khan
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }

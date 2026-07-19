@@ -18,40 +18,66 @@ async function getStats() {
     .from('ai_chat_logs')
     .select('*', { count: 'exact', head: true });
 
+  const { count: pendingOrders } = await supabase
+    .from('service_orders')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'pending');
+
   return {
     projects: projectCount ?? 0,
     profileSections: profileCount ?? 0,
     totalChats: chatCount ?? 0,
+    pendingOrders: pendingOrders ?? 0,
   };
 }
+
+const cards = [
+  { key: 'projects', label: 'Projects', href: '/admin/projects' },
+  { key: 'profileSections', label: 'Profile Sections', href: '/admin/profile' },
+  { key: 'totalChats', label: 'AI Messages Logged', href: '/admin/ai-logs' },
+  { key: 'pendingOrders', label: 'Pending Orders', href: '/admin/orders', highlight: true },
+] as const;
 
 export default async function AdminDashboardPage() {
   const stats = await getStats();
 
   return (
-    <>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <AdminNav />
-      <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-12">
-        <h1 className="text-2xl font-bold text-zinc-900">Dashboard</h1>
-        <p className="mt-1 text-sm text-zinc-500">
-          Overview of your portfolio content.
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+        <h1 className="text-xl font-light sm:text-2xl" style={{ color: 'var(--text-primary)' }}>
+          Dashboard
+        </h1>
+        <p className="mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
+          Overview of your portfolio.
         </p>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-zinc-200 p-6">
-            <p className="text-sm text-zinc-500 font-medium">Projects</p>
-            <p className="mt-1 text-3xl font-bold text-zinc-900">{stats.projects}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 p-6">
-            <p className="text-sm text-zinc-500 font-medium">Profile Sections</p>
-            <p className="mt-1 text-3xl font-bold text-zinc-900">{stats.profileSections}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 p-6">
-            <p className="text-sm text-zinc-500 font-medium">AI Messages Logged</p>
-            <p className="mt-1 text-3xl font-bold text-zinc-900">{stats.totalChats}</p>
-          </div>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {cards.map((card) => {
+            const value = stats[card.key as keyof typeof stats];
+            return (
+              <a
+                key={card.key}
+                href={card.href}
+                className="rounded-2xl border p-6 transition-all duration-200"
+                style={{
+                  backgroundColor: 'var(--surface)',
+                  borderColor: 'highlight' in card && card.highlight && value > 0 ? 'var(--accent)' : 'var(--border)',
+                }}
+              >
+                <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                  {card.label}
+                </p>
+                <p className="mt-1 text-3xl font-light" style={{
+                  color: 'highlight' in card && card.highlight && value > 0 ? 'var(--accent)' : 'var(--text-primary)',
+                }}>
+                  {value}
+                </p>
+              </a>
+            );
+          })}
         </div>
       </main>
-    </>
+    </div>
   );
 }

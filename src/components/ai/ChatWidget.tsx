@@ -7,7 +7,11 @@ interface Message {
   content: string;
 }
 
-export default function ChatWidget() {
+interface ChatWidgetProps {
+  autoOpenSuggestions?: boolean;
+}
+
+export default function ChatWidget({ autoOpenSuggestions }: ChatWidgetProps = {}) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -19,13 +23,20 @@ export default function ChatWidget() {
   const [sessionId] = useState(() => crypto.randomUUID());
   const [remaining, setRemaining] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  }
+
+  async function handleSubmit() {
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
@@ -65,30 +76,83 @@ export default function ChatWidget() {
       ]);
     } finally {
       setIsLoading(false);
+      inputRef.current?.focus();
     }
   }
 
+  const showSuggestions = autoOpenSuggestions && messages.length <= 1 && !isLoading;
+
+  const bubbleUser = {
+    background: 'linear-gradient(135deg, var(--accent), #d946ef)',
+    color: '#ffffff',
+  };
+
+  const bubbleAssistant = {
+    backgroundColor: 'var(--bg-secondary)',
+    color: 'var(--text-primary)',
+  };
+
   return (
-    <div className="flex flex-col h-[500px] sm:h-[600px] rounded-xl border border-zinc-200 bg-white shadow-sm">
-      {/* Header */}
-      <div className="px-4 py-3 border-b border-zinc-100">
-        <h3 className="font-semibold text-sm text-zinc-900">AI Assistant</h3>
-        <p className="text-xs text-zinc-500">Ask me about Hassaan&apos;s work</p>
+    <div
+      className="flex flex-col overflow-hidden rounded-2xl border"
+      style={{
+        backgroundColor: 'var(--surface)',
+        borderColor: 'var(--border)',
+        height: '520px',
+        boxShadow: 'var(--shadow-md)',
+      }}
+    >
+      {/* Header — gradient */}
+      <div
+        className="flex items-center justify-between px-5 py-3.5"
+        style={{
+          borderBottom: '1px solid var(--border)',
+        }}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold text-white"
+            style={{
+              background: 'linear-gradient(135deg, var(--accent), #d946ef)',
+            }}
+          >
+            AI
+          </div>
+          <div>
+            <h3
+              className="text-sm font-medium"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              AI Assistant
+            </h3>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              Ask me anything
+            </p>
+          </div>
+        </div>
+        <span
+          className="flex h-2 w-2 rounded-full"
+          style={{ backgroundColor: 'var(--accent)' }}
+        />
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+      <div
+        className="flex-1 space-y-3 overflow-y-auto px-5 py-4"
+        ref={messagesEndRef}
+        style={{ scrollBehavior: 'smooth' }}
+      >
         {messages.map((msg, i) => (
           <div
             key={i}
             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            style={{
+              animation: 'fadeSlideUp 0.3s ease-out',
+            }}
           >
             <div
-              className={`max-w-[85%] rounded-lg px-3 py-2 text-sm leading-relaxed ${
-                msg.role === 'user'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-zinc-100 text-zinc-800'
-              }`}
+              className="max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed"
+              style={msg.role === 'user' ? bubbleUser : bubbleAssistant}
             >
               {msg.content}
             </div>
@@ -97,7 +161,10 @@ export default function ChatWidget() {
 
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-zinc-100 rounded-lg px-3 py-2 text-sm text-zinc-500">
+            <div
+              className="rounded-2xl px-4 py-2.5 text-sm"
+              style={bubbleAssistant}
+            >
               <span className="inline-flex gap-1">
                 <span className="animate-bounce">.</span>
                 <span className="animate-bounce" style={{ animationDelay: '0.1s' }}>.</span>
@@ -107,39 +174,93 @@ export default function ChatWidget() {
           </div>
         )}
 
-        <div ref={messagesEndRef} />
+        {showSuggestions && (
+          <div className="flex flex-wrap gap-2 pt-1">
+            {[
+              'What services do you offer?',
+              'How much for a website?',
+              'Can you build an AI chatbot?',
+            ].map((suggestion) => (
+              <button
+                key={suggestion}
+                onClick={() => {
+                  setInput(suggestion);
+                }}
+                className="rounded-xl border px-3 py-1.5 text-xs transition-colors"
+                style={{
+                  backgroundColor: 'var(--bg-primary)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--text-secondary)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--accent)';
+                  e.currentTarget.style.color = 'var(--accent)';
+                  e.currentTarget.style.backgroundColor = 'var(--accent-light)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border)';
+                  e.currentTarget.style.color = 'var(--text-secondary)';
+                  e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
+                }}
+              >
+                {suggestion}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="border-t border-zinc-100 p-3 flex gap-2">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask a question..."
-          className="flex-1 px-3 py-2 text-sm rounded-lg border border-zinc-200 bg-white text-zinc-900
-            focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500
-            placeholder:text-zinc-400 disabled:opacity-50"
-          disabled={isLoading}
-          maxLength={2000}
-        />
-        <button
-          type="submit"
-          disabled={isLoading || !input.trim()}
-          className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white
-            hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:pointer-events-none
-            transition-colors"
-        >
-          Send
-        </button>
-      </form>
-
-      {/* Rate limit indicator */}
-      {remaining !== null && remaining <= 5 && (
-        <div className="px-3 pb-2 text-xs text-zinc-400 text-center">
-          {remaining} message{remaining !== 1 ? 's' : ''} remaining this hour
+      <div
+        className="border-t p-4"
+        style={{ borderColor: 'var(--border)' }}
+      >
+        <div className="flex gap-2">
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask a question..."
+            className="flex-1 rounded-xl border px-4 py-2.5 text-sm transition-colors focus:outline-none"
+            style={{
+              backgroundColor: 'var(--bg-primary)',
+              borderColor: 'var(--border)',
+              color: 'var(--text-primary)',
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--accent)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border)';
+            }}
+            disabled={isLoading}
+            maxLength={2000}
+          />
+          <button
+            onClick={handleSubmit}
+            disabled={isLoading || !input.trim()}
+            className="flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 disabled:opacity-40"
+            style={{
+              background: !isLoading && input.trim()
+                ? 'linear-gradient(135deg, var(--accent), #d946ef)'
+                : 'var(--bg-tertiary)',
+            }}
+          >
+            Send
+          </button>
         </div>
-      )}
+
+        {remaining !== null && remaining <= 5 && (
+          <p
+            className="mt-2 text-center text-xs"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            {remaining} message{remaining !== 1 ? 's' : ''} remaining this hour
+          </p>
+        )}
+      </div>
     </div>
   );
 }
