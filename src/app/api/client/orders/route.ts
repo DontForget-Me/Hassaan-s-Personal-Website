@@ -52,6 +52,9 @@ export async function POST(request: NextRequest) {
         budget_amount: body.budget_amount || null,
         budget_currency: body.budget_currency || 'USD',
         timeline_days: body.timeline_days || null,
+        gig_id: body.gig_id || null,
+        package_name: body.package_name || null,
+        package_price: body.package_price || null,
         status: 'pending',
       })
       .select()

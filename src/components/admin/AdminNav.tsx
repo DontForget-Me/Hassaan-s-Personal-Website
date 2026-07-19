@@ -7,12 +7,12 @@ import { createClient } from '@/lib/supabase/client';
 const links = [
   { href: '/admin/dashboard', label: 'Dashboard' },
   { href: '/admin/analytics', label: 'Analytics' },
+  { href: '/admin/gigs', label: 'Gigs' },
   { href: '/admin/portal-projects', label: 'Projects' },
   { href: '/admin/orders', label: 'Orders' },
   { href: '/admin/clients', label: 'Clients' },
   { href: '/admin/testimonials', label: 'Testimonials' },
   { href: '/admin/profile', label: 'Profile' },
-  { href: '/admin/ai-logs', label: 'AI Logs' },
 ];
 
 export default function AdminNav() {

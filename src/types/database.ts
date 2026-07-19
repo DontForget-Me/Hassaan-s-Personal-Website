@@ -66,6 +66,9 @@ export interface ClientOrder {
   admin_notes: string;
   contact_name: string;
   contact_email: string;
+  gig_id: string | null;
+  package_name: string | null;
+  package_price: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -190,6 +193,33 @@ export interface TimeLog {
   description: string;
   hours: number;
   log_date: string;
+  created_at: string;
+}
+
+// --- Gig Types ---
+
+export interface Gig {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  icon: string;
+  is_active: boolean;
+  sort_order: number;
+  packages: GigPackage[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GigPackage {
+  id: string;
+  gig_id: string;
+  name: 'basic' | 'standard' | 'premium';
+  price: number;
+  delivery_days: number | null;
+  features: string[];
+  is_popular: boolean;
+  sort_order: number;
   created_at: string;
 }
 
