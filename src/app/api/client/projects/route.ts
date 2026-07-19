@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
 
     let query = supabase
-      .from('projects')
+      .from('portal_projects')
       .select(`
         *,
         milestones:project_milestones(count),

@@ -10,6 +10,10 @@ async function getStats() {
     .from('projects')
     .select('*', { count: 'exact', head: true });
 
+  const { count: portalProjectCount } = await supabase
+    .from('portal_projects')
+    .select('*', { count: 'exact', head: true });
+
   const { count: profileCount } = await supabase
     .from('profile_content')
     .select('*', { count: 'exact', head: true });
@@ -25,6 +29,7 @@ async function getStats() {
 
   return {
     projects: projectCount ?? 0,
+    portalProjects: portalProjectCount ?? 0,
     profileSections: profileCount ?? 0,
     totalChats: chatCount ?? 0,
     pendingOrders: pendingOrders ?? 0,
@@ -32,8 +37,8 @@ async function getStats() {
 }
 
 const cards = [
-  { key: 'projects', label: 'Projects', href: '/admin/projects' },
-  { key: 'profileSections', label: 'Profile Sections', href: '/admin/profile' },
+  { key: 'portalProjects', label: 'Portal Projects', href: '/admin/portal-projects' },
+  { key: 'projects', label: 'Portfolio Projects', href: '/admin/projects' },
   { key: 'totalChats', label: 'AI Messages Logged', href: '/admin/ai-logs' },
   { key: 'pendingOrders', label: 'Pending Orders', href: '/admin/orders', highlight: true },
 ] as const;

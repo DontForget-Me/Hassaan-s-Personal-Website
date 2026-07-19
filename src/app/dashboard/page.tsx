@@ -40,7 +40,7 @@ export default function DashboardPage() {
 
       // Count projects
       const { count: pCount } = await supabase
-        .from('projects')
+        .from('portal_projects')
         .select('*', { count: 'exact', head: true })
         .eq('client_id', user.id);
 

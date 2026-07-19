@@ -28,7 +28,7 @@ export default function ProjectsPage() {
       if (!user) { router.push('/login'); return; }
 
       const { data } = await supabase
-        .from('projects')
+        .from('portal_projects')
         .select(`
           id, title, status, deadline, total_amount, created_at,
           milestones:project_milestones(count)

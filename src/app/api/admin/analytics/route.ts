@@ -23,7 +23,7 @@ export async function GET() {
 
     // Project stats
     const { data: allProjects } = await supabase
-      .from('projects')
+      .from('portal_projects')
       .select('status, total_amount, created_at');
 
     const totalProjects = allProjects?.length ?? 0;
