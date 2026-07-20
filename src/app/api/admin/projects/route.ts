@@ -9,13 +9,13 @@ export async function GET(request: NextRequest) {
     const id = searchParams.get('id');
 
     if (id) {
-      const { data, error } = await supabase.from('projects').select('*').eq('id', id).single();
-      if (error) return NextResponse.json({ error: error.message }, { status: 404 });
+      const { data, error: _err } = await supabase.from('projects').select('*').eq('id', id).single();
+      if (_err) return NextResponse.json({ error: _err.message }, { status: 404 });
       return NextResponse.json(data);
     }
 
-    const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    const { data, error: _err } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+    if (_err) return NextResponse.json({ error: _err.message }, { status: 500 });
     return NextResponse.json(data ?? []);
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = createAdminClient();
-    const { data, error } = await supabase
+    const { data, error: _insertErr } = await supabase
       .from('projects')
       .insert({
         title,
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       .select()
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (_insertErr) return NextResponse.json({ error: _insertErr.message }, { status: 500 });
 
     // Generate vector embeddings
     try {
@@ -69,20 +69,20 @@ export async function PUT(request: NextRequest) {
     }
 
     const supabase = createAdminClient();
-    const updates: Record<string, any> = {};
+    const updates: Record<string, unknown> = {};
     if (title !== undefined) updates.title = title;
     if (description !== undefined) updates.description = description;
     if (tech_stack !== undefined) updates.tech_stack = tech_stack;
     if (github_url !== undefined) updates.github_url = github_url;
 
-    const { data, error } = await supabase
+    const { data, error: _updateErr } = await supabase
       .from('projects')
       .update(updates)
       .eq('id', id)
       .select()
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (_updateErr) return NextResponse.json({ error: _updateErr.message }, { status: 500 });
 
     // Re-generate vector embeddings if content changed
     if (title !== undefined || description !== undefined) {
@@ -110,9 +110,9 @@ export async function DELETE(request: NextRequest) {
 
     const supabase = createAdminClient();
     // CASCADE delete will handle embeddings
-    const { error } = await supabase.from('projects').delete().eq('id', id);
+    const { error: _deleteErr } = await supabase.from('projects').delete().eq('id', id);
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (_deleteErr) return NextResponse.json({ error: _deleteErr.message }, { status: 500 });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

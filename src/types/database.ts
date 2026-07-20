@@ -106,7 +106,7 @@ export interface ProjectMessage {
   project_id: string;
   sender_id: string;
   content: string;
-  file_attachments: any[];
+  file_attachments: unknown[];
   created_at: string;
 }
 

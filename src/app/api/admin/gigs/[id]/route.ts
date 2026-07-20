@@ -15,7 +15,7 @@ export async function GET(
       .single();
     if (error) return NextResponse.json({ error: 'Gig not found' }, { status: 404 });
     return NextResponse.json(data);
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -29,7 +29,7 @@ export async function PUT(
     const supabase = createAdminClient();
     const body = await request.json();
 
-    const updates: any = { updated_at: new Date().toISOString() };
+    const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
     const allowed = ['title', 'slug', 'description', 'icon', 'is_active', 'sort_order'];
     for (const key of allowed) {
       if (body[key] !== undefined) updates[key] = body[key];

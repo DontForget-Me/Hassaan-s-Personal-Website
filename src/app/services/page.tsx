@@ -10,7 +10,7 @@ const PACKAGE_LABELS: Record<string, string> = { basic: 'Basic', standard: 'Stan
 const PACKAGE_COLORS: Record<string, string> = { basic: '#78716c', standard: '#6366f1', premium: '#f59e0b' };
 
 function GigCard({ gig, onOrder }: { gig: Gig; onOrder: (slug: string, pkg: string) => void }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded] = useState(false);
 
   return (
     <div className="rounded-2xl border overflow-hidden transition-all duration-200"

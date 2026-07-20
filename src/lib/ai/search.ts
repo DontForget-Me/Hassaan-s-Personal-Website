@@ -3,13 +3,6 @@
 
 import { createAdminClient } from '../supabase/admin';
 
-interface Chunk {
-  id: string;
-  content: string;
-  source: string; // 'project' or 'profile'
-  sourceId: string;
-}
-
 interface SearchResult {
   content: string;
   score: number;

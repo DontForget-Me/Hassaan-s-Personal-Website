@@ -33,7 +33,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('notifications')
       .update({ is_read: true })
       .eq('id', body.id)

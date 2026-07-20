@@ -6,6 +6,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ChatWidget from '@/components/ai/ChatWidget';
 import { SERVICES } from '@/lib/services';
+import type { Testimonial } from '@/types/database';
 
 export default function Home() {
   return (
@@ -279,7 +280,7 @@ export default function Home() {
 
 /* Testimonials section */
 function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   useEffect(() => {
     fetch('/api/gigs').then(() => {}); // warm-up

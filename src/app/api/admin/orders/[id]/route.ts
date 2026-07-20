@@ -28,7 +28,7 @@ export async function PUT(
     }
 
     // Update order
-    const updates: any = {
+    const updates: Record<string, unknown> = {
       status: body.status,
       admin_notes: body.admin_notes || '',
       updated_at: new Date().toISOString(),

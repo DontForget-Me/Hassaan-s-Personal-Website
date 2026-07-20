@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
+import type { Gig } from '@/types/database';
+
 export default function AdminGigsPage() {
-  const [gigs, setGigs] = useState<any[]>([]);
+  const [gigs, setGigs] = useState<Gig[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState('');
@@ -39,7 +41,7 @@ export default function AdminGigsPage() {
     await load();
   }
 
-  async function toggleActive(gig: any) {
+  async function toggleActive(gig: Gig) {
     await fetch(`/api/admin/gigs/${gig.id}`, {
       method: 'PUT', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ is_active: !gig.is_active }),
@@ -47,7 +49,7 @@ export default function AdminGigsPage() {
     await load();
   }
 
-  function edit(gig: any) {
+  function edit(gig: Gig) {
     setForm({ title: gig.title, slug: gig.slug, description: gig.description, icon: gig.icon });
     setEditing(gig.id);
     setShowForm(true);

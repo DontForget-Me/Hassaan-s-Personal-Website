@@ -15,15 +15,22 @@ const COLUMNS = [
   { id: 'done', label: 'Done', color: '#d1fae5' },
 ] as const;
 
+interface Milestone {
+  id: string;
+  title: string;
+  amount?: number | null;
+  status: string;
+}
+
 interface Props {
-  milestones: any[];
+  milestones: Milestone[];
   onUpdateStatus: (milestoneId: string, status: string) => Promise<void>;
 }
 
 export default function KanbanBoard({ milestones, onUpdateStatus }: Props) {
   const [moving, setMoving] = useState<string | null>(null);
 
-  const getStatus = (ms: any): KanbanTask['status'] => {
+  const getStatus = (ms: Milestone): KanbanTask['status'] => {
     if (ms.status === 'approved') return 'done';
     if (ms.status === 'completed') return 'review';
     if (ms.status === 'in_progress') return 'in_progress';

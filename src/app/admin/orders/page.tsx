@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import type { ClientOrder } from '@/types/database';
 
 const STATUS_STYLES: Record<string, { bg: string; text: string }> = {
   pending: { bg: '#fef3c7', text: '#92400e' },
@@ -13,14 +12,23 @@ const STATUS_STYLES: Record<string, { bg: string; text: string }> = {
   cancelled: { bg: '#f3f4f6', text: '#6b7280' },
 };
 
+interface OrderRow {
+  id: string;
+  title: string;
+  service_type: string;
+  status: string;
+  description: string;
+  budget_amount: number | null;
+  contact_name: string;
+  contact_email: string;
+  created_at: string;
+  client?: { full_name: string; email: string } | null;
+}
+
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<OrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionId, setActionId] = useState<string | null>(null);
-
-  useEffect(() => {
-    loadOrders();
-  }, []);
 
   async function loadOrders() {
     try {
@@ -30,10 +38,15 @@ export default function AdminOrdersPage() {
         .select('*, client:profiles(full_name, email)')
         .order('created_at', { ascending: false })
         .limit(50);
-      setOrders(data ?? []);
+      setOrders((data as OrderRow[]) ?? []);
     } catch {}
     setLoading(false);
   }
+
+  useEffect(() => {
+    loadOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleAction(id: string, status: string, deadline?: string) {
     setActionId(id);

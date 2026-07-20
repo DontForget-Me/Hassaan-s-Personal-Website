@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
 import StatusBadge from '@/components/client/StatusBadge';
@@ -10,15 +10,31 @@ import TimeTracking from '@/components/client/TimeTracking';
 
 type TabId = 'overview' | 'milestones' | 'kanban' | 'messages' | 'extensions' | 'payments' | 'time';
 
+interface PortalProjectData {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  total_amount: number | null;
+  deadline: string | null;
+  penalty_per_day: number;
+  client?: { full_name: string; email: string } | null;
+  milestones?: { id: string; title: string; amount: number | null; deadline: string | null; status: string }[];
+  messages?: { id: string; content: string; sender_id: string; created_at: string; sender?: { full_name: string } }[];
+  extensions?: { id: string; reason: string; old_deadline: string; new_deadline: string; status: string; response_notes: string; created_at: string }[];
+  payments?: { id: string; amount: number; currency: string; status: string; payment_method: string; transaction_id: string; proof_url: string; created_at: string }[];
+  timeline?: { id: string; created_at: string; description: string }[];
+}
+
 export default function AdminProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const router = useRouter();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<PortalProjectData | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [updating, setUpdating] = useState(false);
 
-  useEffect(() => { load(); }, [id]);
+  useEffect(() => { load(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   async function load() {
     try {
@@ -31,7 +47,7 @@ export default function AdminProjectDetailPage() {
     setLoading(false);
   }
 
-  async function updateProject(updates: any) {
+  async function updateProject(updates: Record<string, unknown>) {
     setUpdating(true);
     await fetch(`/api/admin/portal-projects/${id}`, {
       method: 'PUT',
@@ -55,7 +71,7 @@ export default function AdminProjectDetailPage() {
     await load();
   }
 
-  async function updateMilestone(msId: string, updates: any) {
+  async function updateMilestone(msId: string, updates: Record<string, unknown>) {
     await fetch(`/api/admin/milestones/${msId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -228,7 +244,7 @@ export default function AdminProjectDetailPage() {
               <div className="rounded-2xl border p-6" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
                 <h3 className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Timeline</h3>
                 <div className="mt-3 space-y-2">
-                  {data.timeline?.slice(0, 10).map((e: any) => (
+                  {data.timeline?.slice(0, 10).map((e) => (
                     <div key={e.id} className="flex gap-2 text-xs">
                       <span style={{ color: 'var(--text-muted)' }}>{new Date(e.created_at).toLocaleDateString()}</span>
                       <span style={{ color: 'var(--text-secondary)' }}>{e.description}</span>
@@ -252,7 +268,7 @@ export default function AdminProjectDetailPage() {
               </button>
 
               <div className="space-y-2">
-                {data.milestones?.map((ms: any) => (
+                {data.milestones?.map((ms) => (
                   <div key={ms.id} className="rounded-xl border p-4"
                     style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
                     <div className="flex items-center justify-between gap-3">
@@ -297,7 +313,7 @@ export default function AdminProjectDetailPage() {
           {activeTab === 'messages' && (
             <div className="rounded-2xl border p-6" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
               <div className="max-h-96 space-y-3 overflow-y-auto">
-                {data.messages?.map((msg: any) => (
+                {data.messages?.map((msg) => (
                   <div key={msg.id}>
                     <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
                       {msg.sender?.full_name || 'Unknown'} · {new Date(msg.created_at).toLocaleString()}
@@ -315,7 +331,7 @@ export default function AdminProjectDetailPage() {
           {/* EXTENSIONS TAB */}
           {activeTab === 'extensions' && (
             <div className="space-y-3">
-              {data.extensions?.map((ext: any) => (
+              {data.extensions?.map((ext) => (
                 <div key={ext.id} className="rounded-xl border p-4"
                   style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
                   <div className="flex items-start justify-between gap-3">
@@ -372,7 +388,7 @@ export default function AdminProjectDetailPage() {
           {/* PAYMENTS TAB */}
           {activeTab === 'payments' && (
             <div className="space-y-3">
-              {data.payments?.map((pay: any) => (
+              {data.payments?.map((pay) => (
                 <div key={pay.id} className="rounded-xl border p-4"
                   style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
                   <div className="flex items-start justify-between gap-3">

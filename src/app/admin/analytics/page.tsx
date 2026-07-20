@@ -3,8 +3,22 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 
+interface MonthlyRevenue {
+  month: string;
+  amount: number;
+}
+
+interface AnalyticsData {
+  revenue: { total: number; monthly: MonthlyRevenue[] };
+  projects: { total: number; active: number; completed: number; paused: number };
+  clients: { total: number; newThisMonth: number };
+  orders: { pending: number; approved: number };
+  milestones: { total: number; completed: number; completionRate: number };
+  averageProjectValue: number;
+}
+
 export default function AnalyticsPage() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -26,6 +40,13 @@ export default function AnalyticsPage() {
     return <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <AdminNav />
       <div className="flex items-center justify-center py-24 text-sm" style={{ color: 'var(--text-muted)' }}>{error}</div>
+    </div>;
+  }
+
+  if (!data) {
+    return <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
+      <AdminNav />
+      <div className="flex items-center justify-center py-24 text-sm" style={{ color: 'var(--text-muted)' }}>No data available.</div>
     </div>;
   }
 
@@ -141,12 +162,12 @@ export default function AnalyticsPage() {
           <div className="rounded-2xl border p-6" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
             <h3 className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Monthly Revenue</h3>
             <div className="mt-4 max-h-48 space-y-2 overflow-y-auto">
-              {data.revenue.monthly.map((m: any) => (
+              {data.revenue.monthly.map((m) => (
                 <div key={m.month} className="flex items-center gap-3">
                   <span className="w-16 text-xs" style={{ color: 'var(--text-muted)' }}>{m.month}</span>
                   <div className="flex-1">
                     <div className="h-5 rounded-full" style={{
-                      width: `${Math.min(100, (m.amount / Math.max(...data.revenue.monthly.map((x: any) => x.amount))) * 100)}%`,
+                      width: `${Math.min(100, (m.amount / Math.max(...data.revenue.monthly.map((x) => x.amount))) * 100)}%`,
                       background: 'linear-gradient(90deg, var(--accent), #d946ef)',
                       opacity: 0.7,
                     }} />

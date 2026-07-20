@@ -15,8 +15,9 @@ export async function GET() {
       return NextResponse.json([]);
     }
     return NextResponse.json(data ?? []);
-  } catch (err: any) {
-    console.error('Gigs catch error:', err?.message || err);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('Gigs catch error:', message);
     return NextResponse.json([]);
   }
 }

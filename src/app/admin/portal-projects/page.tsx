@@ -3,9 +3,15 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
+import type { PortalProject } from '@/types/database';
+
+interface PortalProjectRow extends PortalProject {
+  client?: { full_name: string } | null;
+  milestones?: { count: number }[];
+}
 
 export default function AdminPortalProjectsPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<PortalProjectRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('');

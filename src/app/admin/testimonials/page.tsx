@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
+import type { Testimonial } from '@/types/database';
 
 export default function AdminTestimonialsPage() {
-  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ client_name: '', client_role: '', content: '', rating: 5, is_visible: false });
@@ -37,7 +38,7 @@ export default function AdminTestimonialsPage() {
     await load();
   }
 
-  async function toggleVisibility(t: any) {
+  async function toggleVisibility(t: Testimonial) {
     await fetch('/api/admin/testimonials', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -52,7 +53,7 @@ export default function AdminTestimonialsPage() {
     await load();
   }
 
-  function edit(t: any) {
+  function edit(t: Testimonial) {
     setForm({ client_name: t.client_name, client_role: t.client_role, content: t.content, rating: t.rating, is_visible: t.is_visible });
     setEditing(t.id);
     setShowForm(true);
@@ -141,7 +142,7 @@ export default function AdminTestimonialsPage() {
                     )}
                   </div>
                   {t.client_role && <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.client_role}</p>}
-                  <p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>"{t.content}"</p>
+                  <p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>&ldquo;{t.content}&rdquo;</p>
                 </div>
                 <div className="flex shrink-0 gap-2">
                   <button onClick={() => toggleVisibility(t)} className="rounded-lg px-2.5 py-1 text-xs transition-colors"

@@ -9,13 +9,13 @@ export async function GET(request: NextRequest) {
     const id = searchParams.get('id');
 
     if (id) {
-      const { data, error } = await supabase.from('profile_content').select('*').eq('id', id).single();
-      if (error) return NextResponse.json({ error: error.message }, { status: 404 });
+      const { data, error: _error } = await supabase.from('profile_content').select('*').eq('id', id).single();
+      if (_error) return NextResponse.json({ error: _error.message }, { status: 404 });
       return NextResponse.json(data);
     }
 
-    const { data, error } = await supabase.from('profile_content').select('*').order('section_name');
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    const { data, error: _error } = await supabase.from('profile_content').select('*').order('section_name');
+    if (_error) return NextResponse.json({ error: _error.message }, { status: 500 });
     return NextResponse.json(data ?? []);
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -35,13 +35,13 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = createAdminClient();
-    const { data, error } = await supabase
+    const { data, error: _insertError } = await supabase
       .from('profile_content')
       .insert({ section_name, content })
       .select()
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (_insertError) return NextResponse.json({ error: _insertError.message }, { status: 500 });
 
     // Generate vector embeddings
     try {
@@ -66,18 +66,18 @@ export async function PUT(request: NextRequest) {
     }
 
     const supabase = createAdminClient();
-    const updates: Record<string, any> = {};
+    const updates: Record<string, unknown> = {};
     if (section_name !== undefined) updates.section_name = section_name;
     if (content !== undefined) updates.content = content;
 
-    const { data, error } = await supabase
+    const { data, error: _updateError } = await supabase
       .from('profile_content')
       .update(updates)
       .eq('id', id)
       .select()
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (_updateError) return NextResponse.json({ error: _updateError.message }, { status: 500 });
 
     // Re-generate vector embeddings if content changed
     if (content !== undefined) {
@@ -104,9 +104,9 @@ export async function DELETE(request: NextRequest) {
     }
 
     const supabase = createAdminClient();
-    const { error } = await supabase.from('profile_content').delete().eq('id', id);
+    const { error: _deleteError } = await supabase.from('profile_content').delete().eq('id', id);
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (_deleteError) return NextResponse.json({ error: _deleteError.message }, { status: 500 });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

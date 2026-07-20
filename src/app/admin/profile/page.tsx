@@ -111,7 +111,7 @@ export default function AdminProfilePage() {
       <>
         <AdminNav />
         <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-12">
-          <p className="text-zinc-400 text-sm">Loading...</p>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading...</p>
         </main>
       </>
     );
@@ -122,14 +122,14 @@ export default function AdminProfilePage() {
       <AdminNav />
       <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-zinc-900">Profile Content</h1>
-          <p className="text-sm text-zinc-500">
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Profile Content</h1>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
             Manage your bio, skills, education, and more. Changes trigger AI embedding updates.
           </p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-50 text-sm text-red-600">{error}</div>
+          <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: 'var(--accent-light)', color: 'var(--accent)' }}>{error}</div>
         )}
 
         <div className="space-y-6">
@@ -140,7 +140,7 @@ export default function AdminProfilePage() {
 
             return (
               <Card key={key}>
-                <h2 className="font-semibold text-zinc-900 mb-3 capitalize">
+                <h2 className="font-semibold mb-3 capitalize" style={{ color: 'var(--text-primary)' }}>
                   {SECTION_LABELS[item.section_name] ?? item.section_name}
                 </h2>
                 <Textarea
@@ -154,7 +154,7 @@ export default function AdminProfilePage() {
                 <div className="flex gap-2 mt-3">
                   <Button
                     size="sm"
-                    onClick={() => handleSave(item as any)}
+                    onClick={() => handleSave(item)}
                     disabled={saving === key}
                   >
                     {saving === key ? 'Saving...' : isNew ? 'Create' : 'Save'}

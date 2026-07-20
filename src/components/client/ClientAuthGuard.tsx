@@ -13,6 +13,7 @@ export default function ClientAuthGuard({ children }: { children: React.ReactNod
 
   useEffect(() => {
     if (isAuthPage) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAuthenticated(true);
       return;
     }
@@ -43,7 +44,7 @@ export default function ClientAuthGuard({ children }: { children: React.ReactNod
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
         setAuthenticated(true);
         router.push('/dashboard');

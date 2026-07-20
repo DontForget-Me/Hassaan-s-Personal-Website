@@ -348,7 +348,6 @@ export default function ProjectDetailPage() {
 function RenewalButton({ projectId }: { projectId: string }) {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
-  const router = useRouter();
 
   async function handleRenewal() {
     setSubmitting(true);

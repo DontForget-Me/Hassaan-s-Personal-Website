@@ -10,7 +10,7 @@ export async function PUT(
     const supabase = createAdminClient();
     const body = await request.json();
 
-    const updates: any = {};
+    const updates: Record<string, unknown> = {};
     const allowed = ['name', 'price', 'delivery_days', 'features', 'is_popular', 'sort_order'];
     for (const key of allowed) {
       if (body[key] !== undefined) updates[key] = body[key];

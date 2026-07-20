@@ -55,7 +55,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
-    const updates: any = {};
+    const updates: Record<string, unknown> = {};
     const allowed = ['client_name', 'client_role', 'content', 'rating', 'is_visible', 'project_id'];
     for (const key of allowed) {
       if (body[key] !== undefined) updates[key] = body[key];

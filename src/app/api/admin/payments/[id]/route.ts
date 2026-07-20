@@ -17,7 +17,7 @@ export async function PUT(
       );
     }
 
-    const updateData: any = { status: body.status };
+    const updateData: Record<string, unknown> = { status: body.status };
     if (body.status === 'paid') {
       updateData.paid_at = new Date().toISOString();
     }

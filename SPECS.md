@@ -1,4 +1,6 @@
-# SPECS.md - Agentic AI Portfolio & Admin Platform
+# SPECS.md — Agentic AI Portfolio & Admin Platform
+
+> **Note:** This document describes the **Phase 1** original specification. The project has since evolved through 7 phases (all complete). For the current architecture, see **CLAUDE.md** (codebase guide) and **STATUS.md** (what's built). Key changes: 5→21 tables, 7→38 API routes, 7→26 page routes, added client portal, gig system, kanban, time tracking, testimonials, analytics, and more.
 
 ## 1. Product Overview
 **Description:** A premium personal portfolio and AI-driven platform for Muhammad Hassaan Khan. The system serves two primary functions: a public-facing showcase for hiring managers, clients, and teachers, and a secure, private Admin Panel for the owner to manage content and monitor AI interactions.
@@ -25,26 +27,37 @@ The application is split into two distinct routing domains: Public and Admin.
 * `/projects`: A grid/list view of completed full-stack and AI projects.
 * `/about`: Professional background and resume details.
 
-### Admin Routes (Authenticated via Supabase Auth)
-* `/admin/dashboard`: Central hub for the site owner.
-* `/admin/projects`: Interface to Create, Read, Update, and Delete (CRUD) portfolio projects. 
-* `/admin/profile`: Interface to update resume, bio, and skills content.
-* `/admin/ai-logs`: A monitoring interface to see what questions visitors are asking the AI assistant.
+### Admin Routes (Authenticated — admin role, Phase 1+)
+* `/admin/dashboard` — Stats overview (projects, chats, pending orders)
+* `/admin/analytics` — Revenue, project stats, client metrics
+* `/admin/gigs` + `/admin/gigs/[id]` — Gig/package CRUD with feature templates
+* `/admin/projects` — Portfolio project CRUD
+* `/admin/portal-projects` + `/admin/portal-projects/[id]` — Client project management
+* `/admin/clients` + `/admin/clients/[id]` — Client profiles and history
+* `/admin/orders` — Order approve/reject flow
+* `/admin/testimonials` — Client testimonial CRUD
+* `/admin/profile` — Bio/skills/education/experience CRUD
+* `/admin/ai-logs` — AI chat log viewer
+
+### Client Portal Routes (Authenticated — client role, Phase 2+)
+* `/dashboard` — Stats overview, recent orders, quick actions
+* `/dashboard/orders` + `/dashboard/orders/[id]` + `/dashboard/orders/new` — Order wizard
+* `/dashboard/projects` + `/dashboard/projects/[id]` — 5-tab project detail
 
 ## 4. AI Assistant Integration (Phase 1 Scope)
 The embedded AI assistant acts as a knowledgeable representative of the developer.
 
-* **LLM Engine:** **\Deepseek(via Deepseek API , model will be V4 flash model of deepseek)**. Selected for its exceptionally low latency, cost-effectiveness, and strong context window, making it the ideal choice for real-time public chat.
-* **Embedding Model:** **Keyword-based search** (no external API needed). Content is split into chunks and matched by keyword overlap with the query. This works entirely offline with zero cost and no dependencies. Can be upgraded to real vector search later.
-* **Architecture:** Visitor queries are embedded and sent to Supabase Vector to retrieve context from both projects and profile content. The context is passed to Deepseek V4 Flash to generate the final response.
+* **LLM Engine:** **DeepSeek (`deepseek-chat` model)** via DeepSeek API. Selected for low latency, cost-effectiveness, and strong context window.
+* **Embedding/Search:** **Keyword-based search** (no external API needed). Content is split into chunks and matched by keyword overlap with the query. pgvector tables exist but currently store zero-vectors — search runs entirely in-app. Upgrade path to real vector embeddings is available.
+* **Architecture:** Visitor query → keyword search on content chunks → DeepSeek API → response. Rate limited to 20 msg/IP/hr via `ai_chat_logs` table.
 * **Security & Prompt Injection Defense:** The system prompt explicitly instructs the LLM to ignore any instructions embedded in the user's message (e.g., "ignore previous instructions"). Retrieved context is sanitized to ensure the LLM treats it strictly as data, not as executable commands.
 * **Abuse Protection & Rate Limiting:** 
     * Implemented via **database queries** on the `ai_chat_logs` table.
     * Limit of 20 messages per IP address per hour.
     * Hard daily budget cap configured on the Deepseek API dashboard to prevent billing exhaustion from DoS attacks or malicious scraping.
 
-## 5. Data Model (Supabase PostgreSQL)
-The schema supports strict referential integrity and dimensional vectors.
+## 5. Data Model (Supabase PostgreSQL) — Phase 1 Core Tables
+The Phase 1 schema below has 5 tables. The full project now has 21 tables across 7 phases (see `supabase/migrations/` for complete schema).
 
 * **`projects` table:** 
     * `id` (UUID, Primary Key)
@@ -56,7 +69,7 @@ The schema supports strict referential integrity and dimensional vectors.
     * `id` (UUID, Primary Key)
     * `project_id` (Foreign Key referencing `projects` with **ON DELETE CASCADE**)
     * `content` (Text chunk)
-    * `embedding` (vector(2048))
+    * `embedding` (vector(384))
 * **`profile_content` table:**
     * `id` (UUID, Primary Key)
     * `section_name` (String, e.g., 'bio', 'skills', 'education')
@@ -65,7 +78,7 @@ The schema supports strict referential integrity and dimensional vectors.
     * `id` (UUID, Primary Key)
     * `profile_id` (Foreign Key referencing `profile_content` with **ON DELETE CASCADE**)
     * `content` (Text chunk)
-    * `embedding` (vector(2048))
+    * `embedding` (vector(384))
 * **`ai_chat_logs` table:**
     * `id` (UUID, Primary Key)
     * `session_id` (UUID) - Enables grouping conversations per user.

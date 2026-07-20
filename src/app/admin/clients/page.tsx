@@ -3,10 +3,19 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
+
+interface ClientRow {
+  id: string;
+  full_name: string;
+  created_at: string;
+  orders?: { count: number }[];
+  projects?: { count: number }[];
+}
+
 export default function AdminClientsPage() {
-  const [clients, setClients] = useState<any[]>([]);
+  const [clients, setClients] = useState<ClientRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [, setError] = useState('');
 
   useEffect(() => {
     async function load() {

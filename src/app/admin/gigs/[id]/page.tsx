@@ -5,11 +5,12 @@ import { useParams } from 'next/navigation';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
 import FeatureTemplatePicker from '@/components/admin/FeatureTemplatePicker';
+import type { Gig, GigPackage } from '@/types/database';
 
 export default function AdminGigPackagesPage() {
   const { id } = useParams<{ id: string }>();
-  const [gig, setGig] = useState<any>(null);
-  const [packages, setPackages] = useState<any[]>([]);
+  const [gig, setGig] = useState<Gig | null>(null);
+  const [packages, setPackages] = useState<GigPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -17,7 +18,8 @@ export default function AdminGigPackagesPage() {
   const [templates, setTemplates] = useState<Record<string, string[]>>({});
   const [form, setForm] = useState({ name: 'basic', price: '', delivery_days: '', features: '', is_popular: false });
 
-  useEffect(() => { load(); }, [id]);
+  useEffect(() => { load(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   async function load() {
     try {
@@ -76,7 +78,7 @@ export default function AdminGigPackagesPage() {
     } catch {}
   }
 
-  function openEditForm(pkg: any) {
+  function openEditForm(pkg: GigPackage) {
     setEditingPkg(pkg.id);
     setForm({
       name: pkg.name,

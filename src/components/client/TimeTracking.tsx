@@ -2,19 +2,21 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import type { ProjectMilestone, TimeLog } from '@/types/database';
 
 interface Props {
   projectId: string;
-  milestones: any[];
+  milestones: ProjectMilestone[];
 }
 
 export default function TimeTracking({ projectId, milestones }: Props) {
-  const [logs, setLogs] = useState<any[]>([]);
+  const [logs, setLogs] = useState<TimeLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ milestone_id: '', description: '', hours: '', log_date: new Date().toISOString().split('T')[0] });
 
-  useEffect(() => { load(); }, [projectId]);
+  useEffect(() => { load(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId]);
 
   async function load() {
     const supabase = createClient();

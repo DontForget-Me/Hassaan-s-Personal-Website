@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git config *)",
+      "Bash(git push *)",
+      "Bash(gh auth *)",
+      "Bash(git remote *)",
+      "Bash(curl *)",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs kill)",
+      "Bash(NODE_OPTIONS='--max-old-space-size=2048' npm run build)",
+      "Bash(NODE_OPTIONS='--max-old-space-size=2048' npx next dev -p 3000)",
+      "Bash(npm run *)",
+      "Bash(sed -i \"s|\\\\.from\\('projects'\\)|.from\\('portal_projects'\\)|g\" src/app/api/admin/portal-projects/\\\\[id\\\\]/route.ts)",
+      "Bash(sed -i \"s|\\\\.from\\('projects'\\)|.from\\('portal_projects'\\)|g\" src/app/api/client/projects/\\\\[id\\\\]/route.ts)",
+      "Bash(sed -i \"s|\\\\.from\\('projects'\\)|.from\\('portal_projects'\\)|g\" src/app/api/client/projects/\\\\[id\\\\]/extensions/route.ts)",
+      "Bash(sed -i \"s|\\\\.from\\('projects'\\)|.from\\('portal_projects'\\)|g\" src/app/api/client/projects/\\\\[id\\\\]/payments/route.ts)",
+      "Bash(sed -i \"s|\\\\.from\\('projects'\\)|.from\\('portal_projects'\\)|g\" src/app/api/client/projects/\\\\[id\\\\]/files/route.ts)",
+      "Bash(grep -v \"^$\")",
+      "Read(//tmp/**)",
+      "Bash(xargs sed -i 's/Record<string, any>/Record<string, unknown>/g')",
+      "Bash(xargs sed -i 's/catch \\(err: any\\)/catch \\(err\\)/g')",
+      "Bash(xargs sed -i 's/catch \\(error: any\\)/catch \\(error\\)/g')",
+      "Bash(git add *)",
+      "Bash(git commit -m 'Fix remaining issues: lint \\(84→28\\), theme, migrations, SPECS.md *)",
+      "Bash(rm -f .git/index.lock)"
+    ]
+  }
+}

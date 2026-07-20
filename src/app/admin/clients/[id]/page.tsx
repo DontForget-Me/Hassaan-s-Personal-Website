@@ -4,9 +4,17 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
+
+interface ClientDetailData {
+  profile: { full_name: string };
+  orders: { id: string; title: string; service_type: string; status: string; created_at: string }[];
+  projects: { id: string; title: string; status: string; total_amount: number | null }[];
+  payments: { id: string; status: string; amount: number }[];
+}
+
 export default function AdminClientDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<ClientDetailData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -65,7 +73,7 @@ export default function AdminClientDetailPage() {
           </div>
           <div className="rounded-xl border p-4 text-center" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
             <p className="text-2xl font-light" style={{ color: 'var(--text-primary)' }}>
-              {data.payments.filter((p: any) => p.status === 'paid').reduce((a: number, p: any) => a + p.amount, 0)}
+              {data.payments.filter((p) => p.status === 'paid').reduce((a, p) => a + p.amount, 0)}
             </p>
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Revenue ($)</p>
           </div>
@@ -74,7 +82,7 @@ export default function AdminClientDetailPage() {
         {/* Projects */}
         <h2 className="mt-10 text-lg font-medium" style={{ color: 'var(--text-primary)' }}>Projects</h2>
         <div className="mt-3 space-y-2">
-          {data.projects.map((p: any) => (
+          {data.projects.map((p) => (
             <Link key={p.id} href={`/admin/portal-projects/${p.id}`}
               className="flex items-center justify-between rounded-xl border px-4 py-3 transition-all"
               style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}
@@ -96,7 +104,7 @@ export default function AdminClientDetailPage() {
         {/* Recent Orders */}
         <h2 className="mt-8 text-lg font-medium" style={{ color: 'var(--text-primary)' }}>Recent Orders</h2>
         <div className="mt-3 space-y-2">
-          {data.orders.slice(0, 5).map((o: any) => (
+          {data.orders.slice(0, 5).map((o) => (
             <div key={o.id} className="flex items-center justify-between rounded-xl border px-4 py-3"
               style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
               <div>

@@ -101,8 +101,8 @@ export default function AdminProjectsPage() {
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-zinc-900">Projects</h1>
-            <p className="text-sm text-zinc-500">Manage your portfolio projects.</p>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Projects</h1>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Manage your portfolio projects.</p>
           </div>
           {!showForm && (
             <Button onClick={openNew} size="sm">+ New Project</Button>
@@ -110,7 +110,7 @@ export default function AdminProjectsPage() {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-50 text-sm text-red-600">{error}</div>
+          <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: 'var(--accent-light)', color: 'var(--accent)' }}>{error}</div>
         )}
 
         {showForm && (
@@ -158,9 +158,9 @@ export default function AdminProjectsPage() {
         )}
 
         {loading ? (
-          <p className="text-zinc-400 text-sm">Loading...</p>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading...</p>
         ) : projects.length === 0 ? (
-          <div className="text-center py-12 text-zinc-400">
+          <div className="text-center py-12" style={{ color: 'var(--text-muted)' }}>
             <p>No projects yet.</p>
             <Button onClick={openNew} variant="ghost" className="mt-2">
               Add your first project
@@ -171,17 +171,18 @@ export default function AdminProjectsPage() {
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="flex items-start justify-between p-4 rounded-lg border border-zinc-200"
+                className="flex items-start justify-between p-4 rounded-lg border"
+                style={{ borderColor: 'var(--border)' }}
               >
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-medium text-zinc-900 truncate">{project.title}</h3>
-                  <p className="text-sm text-zinc-500 line-clamp-2 mt-0.5">
+                  <h3 className="font-medium truncate" style={{ color: 'var(--text-primary)' }}>{project.title}</h3>
+                  <p className="text-sm line-clamp-2 mt-0.5" style={{ color: 'var(--text-secondary)' }}>
                     {project.description || 'No description'}
                   </p>
                   {project.tech_stack && project.tech_stack.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-2">
                       {project.tech_stack.map((t) => (
-                        <span key={t} className="px-1.5 py-0.5 text-xs rounded bg-zinc-100 text-zinc-600">{t}</span>
+                        <span key={t} className="px-1.5 py-0.5 text-xs rounded" style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)' }}>{t}</span>
                       ))}
                     </div>
                   )}

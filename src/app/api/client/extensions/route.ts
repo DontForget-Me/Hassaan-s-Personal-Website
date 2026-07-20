@@ -16,7 +16,7 @@ export async function GET() {
 
     // Filter to only the user's projects' extensions
     const filtered = (data ?? []).filter(
-      (ext: any) => ext.project?.client_id === user.id
+      (ext) => ext.project?.client_id === user.id
     );
 
     if (error) throw error;
