@@ -8,7 +8,7 @@ export async function GET() {
     const { data, error } = await supabase
       .from('profiles')
       .select(`
-        id, full_name, email:auth_users(email), role, created_at,
+        id, full_name, role, created_at,
         projects:projects(count),
         orders:client_orders(count)
       `)

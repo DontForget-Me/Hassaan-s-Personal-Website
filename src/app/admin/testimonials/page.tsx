@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
-import { createClient } from '@/lib/supabase/client';
 
 export default function AdminTestimonialsPage() {
   const [testimonials, setTestimonials] = useState<any[]>([]);
@@ -14,9 +13,10 @@ export default function AdminTestimonialsPage() {
   useEffect(() => { load(); }, []);
 
   async function load() {
-    const supabase = createClient();
-    const { data } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
-    setTestimonials(data ?? []);
+    try {
+      const res = await fetch('/api/admin/testimonials');
+      if (res.ok) setTestimonials(await res.json());
+    } catch {}
     setLoading(false);
   }
 

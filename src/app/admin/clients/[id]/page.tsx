@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-
 export default function AdminClientDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [data, setData] = useState<any>(null);
@@ -13,35 +11,13 @@ export default function AdminClientDetailPage() {
 
   useEffect(() => {
     async function load() {
-      const supabase = createClient();
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (!profile) { setLoading(false); return; }
-
-      const { data: orders } = await supabase
-        .from('client_orders')
-        .select('*')
-        .eq('client_id', id)
-        .order('created_at', { ascending: false });
-
-      const { data: projects } = await supabase
-        .from('portal_projects')
-        .select('*, milestones:project_milestones(count)')
-        .eq('client_id', id)
-        .order('created_at', { ascending: false });
-
-      const { data: payments } = await supabase
-        .from('payments')
-        .select('*')
-        .eq('client_id', id)
-        .order('created_at', { ascending: false });
-
-      setData({ profile, orders: orders ?? [], projects: projects ?? [], payments: payments ?? [] });
+      try {
+        const res = await fetch(`/api/admin/clients/${id}`);
+        if (res.ok) {
+          const result = await res.json();
+          setData(result);
+        }
+      } catch {}
       setLoading(false);
     }
     load();

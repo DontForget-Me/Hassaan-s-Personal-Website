@@ -3,21 +3,28 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-
 export default function AdminGigsPage() {
   const [gigs, setGigs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
   const [form, setForm] = useState({ title: '', slug: '', description: '', icon: '' });
   const [editing, setEditing] = useState<string | null>(null);
 
   useEffect(() => { load(); }, []);
 
   async function load() {
-    const supabase = createClient();
-    const { data } = await supabase.from('gigs').select('*, packages:gig_packages(*)').order('sort_order');
-    setGigs(data ?? []);
+    try {
+      const res = await fetch('/api/admin/gigs');
+      if (res.ok) {
+        const data = await res.json();
+        setGigs(data ?? []);
+      } else {
+        setError('Failed to load gigs');
+      }
+    } catch {
+      setError('Failed to load gigs');
+    }
     setLoading(false);
   }
 
@@ -66,6 +73,7 @@ export default function AdminGigsPage() {
           <div>
             <h1 className="text-xl font-light sm:text-2xl" style={{ color: 'var(--text-primary)' }}>Gigs</h1>
             <p className="mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>Service offerings with package tiers.</p>
+            {error && <p className="mt-2 text-xs" style={{ color: '#ef4444' }}>{error}</p>}
           </div>
           {!showForm && <button onClick={() => { setShowForm(true); setEditing(null); setForm({ title: '', slug: '', description: '', icon: '' }); }}
             className="rounded-xl px-4 py-2 text-sm font-medium text-white" style={{ background: 'linear-gradient(135deg, var(--accent), #d946ef)' }}>

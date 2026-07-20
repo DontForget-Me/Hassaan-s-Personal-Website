@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
 import StatusBadge from '@/components/client/StatusBadge';
 import KanbanBoard from '@/components/client/KanbanBoard';
 import TimeTracking from '@/components/client/TimeTracking';
@@ -22,34 +21,13 @@ export default function AdminProjectDetailPage() {
   useEffect(() => { load(); }, [id]);
 
   async function load() {
-    const supabase = createClient();
-    const { data: project } = await supabase
-      .from('portal_projects')
-      .select('*, client:profiles(full_name, email), milestones:project_milestones(*), timeline:project_timeline_events(*)')
-      .eq('id', id)
-      .single();
-
-    if (!project) { setLoading(false); return; }
-
-    const { data: extensions } = await supabase
-      .from('extension_requests')
-      .select('*, milestone:project_milestones(title)')
-      .eq('project_id', id)
-      .order('created_at', { ascending: false });
-
-    const { data: payments } = await supabase
-      .from('payments')
-      .select('*, milestone:project_milestones(title)')
-      .eq('project_id', id)
-      .order('created_at', { ascending: false });
-
-    const { data: messages } = await supabase
-      .from('project_messages')
-      .select('*, sender:profiles(full_name)')
-      .eq('project_id', id)
-      .order('created_at', { ascending: true });
-
-    setData({ ...project, extensions: extensions ?? [], payments: payments ?? [], messages: messages ?? [] });
+    try {
+      const res = await fetch(`/api/admin/portal-projects/${id}`);
+      if (res.ok) {
+        const result = await res.json();
+        setData(result);
+      }
+    } catch {}
     setLoading(false);
   }
 

@@ -23,13 +23,15 @@ export default function AdminOrdersPage() {
   }, []);
 
   async function loadOrders() {
-    const supabase = createClient();
-    const { data } = await supabase
-      .from('client_orders')
-      .select('*, client:profiles(full_name, email)')
-      .order('created_at', { ascending: false })
-      .limit(50);
-    setOrders(data ?? []);
+    try {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from('client_orders')
+        .select('*, client:profiles(full_name, email)')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      setOrders(data ?? []);
+    } catch {}
     setLoading(false);
   }
 

@@ -3,25 +3,24 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-
 export default function AdminClientsPage() {
   const [clients, setClients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function load() {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from('profiles')
-        .select(`
-          id, full_name, role, created_at,
-          projects:projects(count),
-          orders:client_orders(count)
-        `)
-        .eq('role', 'client')
-        .order('created_at', { ascending: false });
-      setClients(data ?? []);
+      try {
+        const res = await fetch('/api/admin/clients');
+        if (res.ok) {
+          const data = await res.json();
+          setClients(data ?? []);
+        } else {
+          setError('Failed to load clients');
+        }
+      } catch {
+        setError('Failed to load clients');
+      }
       setLoading(false);
     }
     load();
