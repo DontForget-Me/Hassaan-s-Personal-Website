@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
@@ -31,16 +31,6 @@ export default function AdminGigPackagesPage() {
     setLoading(false);
   }
 
-  const loadTemplates = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/admin/gigs/${id}/templates`);
-      if (res.ok) {
-        const data = await res.json();
-        setTemplates(data);
-      }
-    } catch {}
-  }, [id]);
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
@@ -69,12 +59,21 @@ export default function AdminGigPackagesPage() {
     } catch { setError('Failed to save'); }
   }
 
-  function openAddForm(tier: string) {
+  async function openAddForm(tier: string) {
     setEditingPkg(null);
-    loadTemplates();
-    const templateFeatures = templates[tier] || [];
-    setForm({ name: tier, price: '', delivery_days: '', features: templateFeatures.join(', '), is_popular: false });
     setShowForm(true);
+    setForm({ name: tier, price: '', delivery_days: '', features: '', is_popular: false });
+
+    // Load templates and set features after they arrive
+    try {
+      const res = await fetch(`/api/admin/gigs/${id}/templates`);
+      if (res.ok) {
+        const data = await res.json();
+        setTemplates(data);
+        const tierFeatures = (data[tier] || []).join(', ');
+        setForm({ name: tier, price: '', delivery_days: '', features: tierFeatures, is_popular: false });
+      }
+    } catch {}
   }
 
   function openEditForm(pkg: any) {
@@ -154,8 +153,12 @@ export default function AdminGigPackagesPage() {
                 <label className="block text-xs mb-1" style={{ color: 'var(--text-muted)' }}>Tier</label>
                 <select value={form.name} onChange={e => {
                   const newTier = e.target.value;
-                  const templateFeatures = templates[newTier] || [];
-                  setForm(p => ({ ...p, name: newTier, features: editingPkg ? p.features : templateFeatures.join(', ') }));
+                  const templateFeatures = templates[newTier];
+                  if (templateFeatures && !editingPkg) {
+                    setForm(p => ({ ...p, name: newTier, features: templateFeatures.join(', ') }));
+                  } else {
+                    setForm(p => ({ ...p, name: newTier }));
+                  }
                 }}
                   className="w-full rounded-xl border px-3.5 py-2.5 text-sm" style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}>
                   <option value="basic">Basic</option>
