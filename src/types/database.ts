@@ -223,6 +223,14 @@ export interface GigPackage {
   created_at: string;
 }
 
+export interface GigFeatureTemplate {
+  id: string;
+  service_type: string;
+  tier: 'basic' | 'standard' | 'premium';
+  feature: string;
+  sort_order: number;
+}
+
 export interface ServiceOrder {
   id: string;
   client_name: string;
