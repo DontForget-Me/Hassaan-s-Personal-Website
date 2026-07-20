@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AdminGigPackagesPage() {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +18,7 @@ export default function AdminGigPackagesPage() {
   useEffect(() => { load(); }, [id]);
 
   async function load() {
-    const supabase = createAdminClient();
+    const supabase = createClient();
     const { data: g } = await supabase.from('gigs').select('*').eq('id', id).single();
     const { data: pkgs } = await supabase.from('gig_packages').select('*').eq('gig_id', id).order('sort_order');
     setGig(g);
@@ -48,7 +48,7 @@ export default function AdminGigPackagesPage() {
 
   async function deletePackage(pkgId: string) {
     if (!confirm('Delete this package?')) return;
-    const supabase = createAdminClient();
+    const supabase = createClient();
     await supabase.from('gig_packages').delete().eq('id', pkgId);
     await load();
   }

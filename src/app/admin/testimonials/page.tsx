@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AdminTestimonialsPage() {
   const [testimonials, setTestimonials] = useState<any[]>([]);
@@ -14,7 +14,7 @@ export default function AdminTestimonialsPage() {
   useEffect(() => { load(); }, []);
 
   async function load() {
-    const supabase = createAdminClient();
+    const supabase = createClient();
     const { data } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
     setTestimonials(data ?? []);
     setLoading(false);

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AdminPortalProjectsPage() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -12,7 +12,7 @@ export default function AdminPortalProjectsPage() {
 
   useEffect(() => {
     async function load() {
-      const supabase = createAdminClient();
+      const supabase = createClient();
       let query = supabase
         .from('portal_projects')
         .select('*, client:profiles(full_name, email), milestones:project_milestones(count)')

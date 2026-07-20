@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AdminClientDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -13,7 +13,7 @@ export default function AdminClientDetailPage() {
 
   useEffect(() => {
     async function load() {
-      const supabase = createAdminClient();
+      const supabase = createClient();
 
       const { data: profile } = await supabase
         .from('profiles')
@@ -30,7 +30,7 @@ export default function AdminClientDetailPage() {
         .order('created_at', { ascending: false });
 
       const { data: projects } = await supabase
-        .from('projects')
+        .from('portal_projects')
         .select('*, milestones:project_milestones(count)')
         .eq('client_id', id)
         .order('created_at', { ascending: false });

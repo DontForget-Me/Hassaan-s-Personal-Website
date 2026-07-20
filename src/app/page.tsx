@@ -281,8 +281,9 @@ function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<any[]>([]);
 
   useEffect(() => {
-    import('@/lib/supabase/admin').then(({ createAdminClient }) => {
-      const supabase = createAdminClient();
+    fetch('/api/gigs').then(() => {}); // warm-up
+    import('@/lib/supabase/client').then(({ createClient }) => {
+      const supabase = createClient();
       supabase.from('testimonials').select('*').eq('is_visible', true).order('created_at', { ascending: false })
         .then(({ data }) => setTestimonials(data ?? []));
     });

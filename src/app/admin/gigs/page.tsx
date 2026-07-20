@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AdminGigsPage() {
   const [gigs, setGigs] = useState<any[]>([]);
@@ -15,7 +15,7 @@ export default function AdminGigsPage() {
   useEffect(() => { load(); }, []);
 
   async function load() {
-    const supabase = createAdminClient();
+    const supabase = createClient();
     const { data } = await supabase.from('gigs').select('*, packages:gig_packages(*)').order('sort_order');
     setGigs(data ?? []);
     setLoading(false);

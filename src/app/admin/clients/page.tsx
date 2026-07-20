@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AdminClientsPage() {
   const [clients, setClients] = useState<any[]>([]);
@@ -11,7 +11,7 @@ export default function AdminClientsPage() {
 
   useEffect(() => {
     async function load() {
-      const supabase = createAdminClient();
+      const supabase = createClient();
       const { data } = await supabase
         .from('profiles')
         .select(`

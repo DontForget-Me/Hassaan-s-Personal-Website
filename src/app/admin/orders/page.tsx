@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/client';
 import type { ClientOrder } from '@/types/database';
 
 const STATUS_STYLES: Record<string, { bg: string; text: string }> = {
@@ -23,7 +23,7 @@ export default function AdminOrdersPage() {
   }, []);
 
   async function loadOrders() {
-    const supabase = createAdminClient();
+    const supabase = createClient();
     const { data } = await supabase
       .from('client_orders')
       .select('*, client:profiles(full_name, email)')

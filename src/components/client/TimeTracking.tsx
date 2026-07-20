@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/client';
 
 interface Props {
   projectId: string;
@@ -17,7 +17,7 @@ export default function TimeTracking({ projectId, milestones }: Props) {
   useEffect(() => { load(); }, [projectId]);
 
   async function load() {
-    const supabase = createAdminClient();
+    const supabase = createClient();
     const { data } = await supabase
       .from('time_logs')
       .select('*, milestone:project_milestones(title)')

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import AdminNav from '@/components/admin/AdminNav';
 import Link from 'next/link';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/client';
 import StatusBadge from '@/components/client/StatusBadge';
 import KanbanBoard from '@/components/client/KanbanBoard';
 import TimeTracking from '@/components/client/TimeTracking';
@@ -22,9 +22,9 @@ export default function AdminProjectDetailPage() {
   useEffect(() => { load(); }, [id]);
 
   async function load() {
-    const supabase = createAdminClient();
+    const supabase = createClient();
     const { data: project } = await supabase
-      .from('projects')
+      .from('portal_projects')
       .select('*, client:profiles(full_name, email), milestones:project_milestones(*), timeline:project_timeline_events(*)')
       .eq('id', id)
       .single();
