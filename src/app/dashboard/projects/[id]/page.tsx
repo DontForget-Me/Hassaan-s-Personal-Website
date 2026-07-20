@@ -41,7 +41,7 @@ export default function ProjectDetailPage() {
       if (!user) { router.push('/login'); return; }
 
       const { data } = await supabase
-        .from('projects')
+        .from('portal_projects')
         .select('*')
         .eq('id', id)
         .eq('client_id', user.id)

@@ -29,7 +29,7 @@ export async function GET(
 
     // Projects
     const { data: projects } = await supabase
-      .from('projects')
+      .from('portal_projects')
       .select('*, milestones:project_milestones(count)')
       .eq('client_id', id)
       .order('created_at', { ascending: false });

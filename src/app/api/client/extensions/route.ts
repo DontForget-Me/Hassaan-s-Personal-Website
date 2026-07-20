@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/client';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 export async function GET() {
   try {
-    const supabase = createClient();
+    const supabase = await createServerSupabaseClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -11,7 +11,7 @@ export async function GET() {
 
     const { data, error } = await supabase
       .from('extension_requests')
-      .select('*, project:projects(title), milestone:project_milestones(title)')
+      .select('*, project:portal_projects(title, client_id), milestone:project_milestones(title)')
       .order('created_at', { ascending: false });
 
     // Filter to only the user's projects' extensions

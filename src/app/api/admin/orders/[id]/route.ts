@@ -44,7 +44,7 @@ export async function PUT(
     // If approved, create a project
     if (body.status === 'approved' && order.client_id) {
       const { data: project } = await supabase
-        .from('projects')
+        .from('portal_projects')
         .insert({
           order_id: id,
           client_id: order.client_id,

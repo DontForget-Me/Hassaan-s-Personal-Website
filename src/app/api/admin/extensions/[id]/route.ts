@@ -43,7 +43,7 @@ export async function PUT(
     // If approved, update the project deadline
     if (body.status === 'approved') {
       await supabase
-        .from('projects')
+        .from('portal_projects')
         .update({ deadline: ext.new_deadline })
         .eq('id', ext.project_id);
     }

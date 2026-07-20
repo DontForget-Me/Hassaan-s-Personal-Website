@@ -21,19 +21,43 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
     const supabase = createClient();
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!session?.user) {
+        router.push('/admin/login');
+        setLoading(false);
+        return;
+      }
+
+      // Verify admin role
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single();
+
+      if (profile?.role === 'admin') {
         setAuthenticated(true);
       } else {
+        await supabase.auth.signOut();
         router.push('/admin/login');
       }
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
-        setAuthenticated(true);
-        router.push('/admin/dashboard');
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
+        if (profile?.role === 'admin') {
+          setAuthenticated(true);
+          router.push('/admin/dashboard');
+        } else {
+          await supabase.auth.signOut();
+          router.push('/admin/login');
+        }
       } else if (event === 'SIGNED_OUT') {
         setAuthenticated(false);
         router.push('/admin/login');

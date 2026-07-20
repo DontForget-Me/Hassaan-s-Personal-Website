@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ChatWidget from '@/components/ai/ChatWidget';
@@ -52,14 +53,14 @@ export default function Home() {
             </div>
 
             <div className="mt-16 flex items-center justify-center gap-4">
-              <a
+              <Link
                 href="/services"
                 className="rounded-xl px-6 py-2.5 text-sm font-medium text-white transition-all duration-200"
                 style={{ background: 'linear-gradient(135deg, var(--accent), #d946ef)' }}
               >
                 Hire Me
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/projects"
                 className="rounded-xl border px-6 py-2.5 text-sm font-medium transition-all duration-200"
                 style={{
@@ -71,7 +72,7 @@ export default function Home() {
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; }}
               >
                 View Projects
-              </a>
+              </Link>
             </div>
 
             <div className="mt-20 flex flex-col items-center gap-2">
@@ -100,7 +101,7 @@ export default function Home() {
 
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {SERVICES.map((service) => (
-                <a
+                <Link
                   key={service.id}
                   href="/services"
                   className="group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300"
@@ -126,18 +127,18 @@ export default function Home() {
                   <p className="mt-1.5 text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
                     {service.description}
                   </p>
-                </a>
+                </Link>
               ))}
             </div>
 
             <div className="mt-8 text-center">
-              <a
+              <Link
                 href="/services"
                 className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
                 style={{ color: 'var(--accent)' }}
               >
                 View all services & details &rarr;
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -226,14 +227,14 @@ export default function Home() {
                 Have a project in mind? I&apos;d love to hear about it. Let&apos;s turn your ideas into reality.
               </p>
               <div className="mt-8 flex items-center justify-center gap-4">
-                <a
+                <Link
                   href="/services"
                   className="rounded-xl px-6 py-2.5 text-sm font-medium text-white transition-all duration-200"
                   style={{ background: 'linear-gradient(135deg, var(--accent), #d946ef)' }}
                 >
                   Start a Project
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/about"
                   className="rounded-xl border px-6 py-2.5 text-sm font-medium transition-all duration-200"
                   style={{
@@ -245,7 +246,7 @@ export default function Home() {
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; }}
                 >
                   Learn More
-                </a>
+                </Link>
               </div>
             </div>
           </div>

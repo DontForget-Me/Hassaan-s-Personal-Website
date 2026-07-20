@@ -19,12 +19,25 @@ export default function ClientAuthGuard({ children }: { children: React.ReactNod
 
     const supabase = createClient();
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!session) {
         router.push('/login');
         setAuthenticated(false);
-      } else {
+        return;
+      }
+
+      // Verify user has a profile (client or admin)
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single();
+
+      if (profile) {
         setAuthenticated(true);
+      } else {
+        router.push('/login');
+        setAuthenticated(false);
       }
     });
 

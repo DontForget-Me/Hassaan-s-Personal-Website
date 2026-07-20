@@ -6,17 +6,26 @@ import AdminNav from '@/components/admin/AdminNav';
 export default function AnalyticsPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetch('/api/admin/analytics')
       .then(r => r.json())
-      .then(d => { setData(d); setLoading(false); });
+      .then(d => { setData(d); setLoading(false); })
+      .catch(() => { setError('Failed to load analytics.'); setLoading(false); });
   }, []);
 
   if (loading) {
     return <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <AdminNav />
       <div className="flex items-center justify-center py-24 text-sm" style={{ color: 'var(--text-muted)' }}>Loading...</div>
+    </div>;
+  }
+
+  if (error) {
+    return <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
+      <AdminNav />
+      <div className="flex items-center justify-center py-24 text-sm" style={{ color: 'var(--text-muted)' }}>{error}</div>
     </div>;
   }
 

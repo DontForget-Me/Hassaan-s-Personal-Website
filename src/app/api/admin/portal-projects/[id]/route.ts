@@ -10,7 +10,7 @@ export async function GET(
     const supabase = createAdminClient();
 
     const { data, error } = await supabase
-      .from('projects')
+      .from('portal_projects')
       .select('*, client:profiles(full_name, email), milestones:project_milestones(*), timeline:project_timeline_events(*)')
       .eq('id', id)
       .single();
@@ -71,7 +71,7 @@ export async function PUT(
     updates.updated_at = new Date().toISOString();
 
     const { data, error } = await supabase
-      .from('projects')
+      .from('portal_projects')
       .update(updates)
       .eq('id', id)
       .select()
