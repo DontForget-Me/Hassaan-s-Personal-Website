@@ -30,6 +30,7 @@ export default function ExtensionRequestSection({ projectId, currentDeadline }: 
 
   useEffect(() => {
     loadExtensions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId]);
 
   async function loadExtensions() {

@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const { data, error: _error } = await supabase.from('profile_content').select('*').order('section_name');
     if (_error) return NextResponse.json({ error: _error.message }, { status: 500 });
     return NextResponse.json(data ?? []);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(data, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -89,7 +89,7 @@ export async function PUT(request: NextRequest) {
     }
 
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -108,7 +108,7 @@ export async function DELETE(request: NextRequest) {
 
     if (_deleteError) return NextResponse.json({ error: _deleteError.message }, { status: 500 });
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

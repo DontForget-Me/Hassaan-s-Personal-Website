@@ -2,7 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import type { ProjectMilestone, TimeLog } from '@/types/database';
+import type { ProjectMilestone } from '@/types/database';
+
+interface TimeLogWithMilestone {
+  id: string;
+  project_id: string;
+  milestone_id: string | null;
+  user_id: string;
+  description: string;
+  hours: number;
+  log_date: string;
+  created_at: string;
+  milestone?: { title: string } | null;
+}
 
 interface Props {
   projectId: string;
@@ -10,7 +22,7 @@ interface Props {
 }
 
 export default function TimeTracking({ projectId, milestones }: Props) {
-  const [logs, setLogs] = useState<TimeLog[]>([]);
+  const [logs, setLogs] = useState<TimeLogWithMilestone[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ milestone_id: '', description: '', hours: '', log_date: new Date().toISOString().split('T')[0] });

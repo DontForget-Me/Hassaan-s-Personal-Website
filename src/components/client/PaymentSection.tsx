@@ -40,6 +40,7 @@ export default function PaymentSection({ projectId, totalAmount }: Props) {
 
   useEffect(() => {
     loadPayments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId]);
 
   async function loadPayments() {

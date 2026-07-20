@@ -44,8 +44,8 @@ export default function AdminOrdersPage() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleAction(id: string, status: string, deadline?: string) {

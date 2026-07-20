@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const { data, error: _err } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
     if (_err) return NextResponse.json({ error: _err.message }, { status: 500 });
     return NextResponse.json(data ?? []);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(data, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -94,7 +94,7 @@ export async function PUT(request: NextRequest) {
     }
 
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -114,7 +114,7 @@ export async function DELETE(request: NextRequest) {
 
     if (_deleteErr) return NextResponse.json({ error: _deleteErr.message }, { status: 500 });
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

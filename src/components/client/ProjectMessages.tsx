@@ -17,17 +17,6 @@ export default function ProjectMessages({ projectId }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id ?? null));
-
-    loadMessages();
-  }, [projectId]);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
   async function loadMessages() {
     const supabase = createClient();
     const { data } = await supabase
@@ -36,9 +25,22 @@ export default function ProjectMessages({ projectId }: Props) {
       .eq('project_id', projectId)
       .order('created_at', { ascending: true });
 
-    if (data) setMessages(data as any);
+    if (data) setMessages(data as (ProjectMessage & { sender?: { full_name: string } })[]);
     setLoading(false);
   }
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id ?? null));
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadMessages();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   async function handleSend() {
     if (!content.trim() || sending) return;

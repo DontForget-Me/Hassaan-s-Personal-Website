@@ -7,6 +7,7 @@ import Link from 'next/link';
 import StatusBadge from '@/components/client/StatusBadge';
 import KanbanBoard from '@/components/client/KanbanBoard';
 import TimeTracking from '@/components/client/TimeTracking';
+import type { ProjectMilestone } from '@/types/database';
 
 type TabId = 'overview' | 'milestones' | 'kanban' | 'messages' | 'extensions' | 'payments' | 'time';
 
@@ -19,7 +20,7 @@ interface PortalProjectData {
   deadline: string | null;
   penalty_per_day: number;
   client?: { full_name: string; email: string } | null;
-  milestones?: { id: string; title: string; amount: number | null; deadline: string | null; status: string }[];
+  milestones?: ProjectMilestone[];
   messages?: { id: string; content: string; sender_id: string; created_at: string; sender?: { full_name: string } }[];
   extensions?: { id: string; reason: string; old_deadline: string; new_deadline: string; status: string; response_notes: string; created_at: string }[];
   payments?: { id: string; amount: number; currency: string; status: string; payment_method: string; transaction_id: string; proof_url: string; created_at: string }[];

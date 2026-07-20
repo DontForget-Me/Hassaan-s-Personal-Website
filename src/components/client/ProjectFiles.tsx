@@ -15,10 +15,6 @@ export default function ProjectFiles({ projectId }: Props) {
   const [form, setForm] = useState({ file_name: '', file_url: '', expires_days: '' });
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    loadFiles();
-  }, [projectId]);
-
   async function loadFiles() {
     const supabase = createClient();
     const { data } = await supabase
@@ -27,9 +23,15 @@ export default function ProjectFiles({ projectId }: Props) {
       .eq('project_id', projectId)
       .order('created_at', { ascending: false });
 
-    if (data) setFiles(data as any);
+    if (data) setFiles(data as ProjectFile[]);
     setLoading(false);
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadFiles();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

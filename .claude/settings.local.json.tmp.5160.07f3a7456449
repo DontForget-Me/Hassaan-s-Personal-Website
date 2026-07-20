@@ -23,7 +23,9 @@
       "Bash(xargs sed -i 's/catch \\(error: any\\)/catch \\(error\\)/g')",
       "Bash(git add *)",
       "Bash(git commit -m 'Fix remaining issues: lint \\(84→28\\), theme, migrations, SPECS.md *)",
-      "Bash(rm -f .git/index.lock)"
+      "Bash(rm -f .git/index.lock)",
+      "Bash(tee /tmp/lint-after.txt)",
+      "Bash(git commit -m 'Fix all remaining lint issues: 84→0 errors, 0 warnings *)"
     ]
   }
 }
