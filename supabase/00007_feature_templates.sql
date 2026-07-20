@@ -72,31 +72,39 @@ INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALU
   ('web-development', 'premium', '5 Revision Rounds', 13),
   ('web-development', 'premium', 'Priority 24/7 Support', 14);
 
--- ===== AI INTEGRATION =====
--- Basic
+-- ===== AI & MACHINE LEARNING =====
+-- Basic (chatbot / simple AI integration)
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
-  ('ai-integration', 'basic', 'Basic Chatbot Setup', 1),
-  ('ai-integration', 'basic', 'FAQ-based Responses', 2),
-  ('ai-integration', 'basic', 'Single Platform Integration', 3),
-  ('ai-integration', 'basic', 'Basic Documentation', 4),
-  ('ai-integration', 'basic', '7 Days Support', 5);
--- Standard
+  ('ai-integration', 'basic', 'Basic AI Chatbot Setup', 1),
+  ('ai-integration', 'basic', 'FAQ-based Q&A System', 2),
+  ('ai-integration', 'basic', 'Single Platform Integration (Website)', 3),
+  ('ai-integration', 'basic', 'Pre-built Response Templates', 4),
+  ('ai-integration', 'basic', 'Basic Documentation', 5),
+  ('ai-integration', 'basic', '1 Revision Round', 6),
+  ('ai-integration', 'basic', '7 Days Delivery', 7);
+-- Standard (RAG + multiple sources)
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
   ('ai-integration', 'standard', 'Everything in Basic', 1),
-  ('ai-integration', 'standard', 'RAG Pipeline', 2),
-  ('ai-integration', 'standard', 'Multiple Data Sources', 3),
-  ('ai-integration', 'standard', 'Custom Training Data', 4),
-  ('ai-integration', 'standard', 'Analytics Dashboard', 5),
-  ('ai-integration', 'standard', '14 Days Support', 6);
--- Premium
+  ('ai-integration', 'standard', 'RAG Pipeline (Retrieval-Augmented Generation)', 2),
+  ('ai-integration', 'standard', 'Multiple Data Sources (PDF, Docs, Web)', 3),
+  ('ai-integration', 'standard', 'Custom Training on Your Data', 4),
+  ('ai-integration', 'standard', 'Analytics Dashboard (Query Logs + Metrics)', 5),
+  ('ai-integration', 'standard', 'Multi-platform Integration (Web + Slack + WhatsApp)', 6),
+  ('ai-integration', 'standard', 'Human Handoff Escalation', 7),
+  ('ai-integration', 'standard', '3 Revision Rounds', 8),
+  ('ai-integration', 'standard', '14 Days Delivery', 9);
+-- Premium (advanced LLM + custom development)
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
   ('ai-integration', 'premium', 'Everything in Standard', 1),
-  ('ai-integration', 'premium', 'Advanced LLM Integration', 2),
-  ('ai-integration', 'premium', 'Multi-language Support', 3),
-  ('ai-integration', 'premium', 'Custom API Development', 4),
-  ('ai-integration', 'premium', 'Priority 24/7 Support', 5),
-  ('ai-integration', 'premium', '30 Days Support', 6),
-  ('ai-integration', 'premium', 'SLA Guarantee', 7);
+  ('ai-integration', 'premium', 'Advanced LLM Integration (GPT-4, Claude, Gemini)', 2),
+  ('ai-integration', 'premium', 'Custom AI Agent / Workflow Automation', 3),
+  ('ai-integration', 'premium', 'Multi-language Support (10+ Languages)', 4),
+  ('ai-integration', 'premium', 'Custom API Development for AI Features', 5),
+  ('ai-integration', 'premium', 'File Upload & Analysis (Images, PDFs, Audio)', 6),
+  ('ai-integration', 'premium', 'Vector Database Setup (Pinecone / pgvector)', 7),
+  ('ai-integration', 'premium', 'Performance Optimization & Caching', 8),
+  ('ai-integration', 'premium', 'Priority 24/7 Support', 9),
+  ('ai-integration', 'premium', '30 Days Post-Launch Support', 10);
 
 -- ===== BACKEND & APIs =====
 -- Basic
