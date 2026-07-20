@@ -1,18 +1,7 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# CLAUDE.md — Hassaan's Portfolio & Client Portal
 
 ## Project Overview
-
-Agentic AI Portfolio & Admin Platform for Muhammad Hassaan Khan — a Next.js 16 (App Router) + TypeScript application with Supabase (PostgreSQL + Auth + pgvector) and a Deepseek V4 Flash AI assistant (RAG-based). Built using Spec-Driven Development (SDD); SPECS.md is the source of truth.
-
-**High-level architecture:**
-- Public portfolio routes (`/`, `/projects`, `/about`, `/services`) with an embedded RAG AI assistant
-- Client portal routes (`/dashboard`, `/dashboard/orders`, `/dashboard/projects`) secured behind Supabase Auth (client role)
-- Admin routes (`/admin/dashboard`, `/admin/projects`, `/admin/profile`, `/admin/ai-logs`, `/admin/orders`) secured behind Supabase Auth (admin role)
-- AI assistant pipeline: visitor query → keyword search on content chunks → Deepseek V4 Flash → response
-- Rate limiting: 20 messages/IP/hour tracked in `ai_chat_logs` table (not Vercel KV)
-- **Keyword-based search** (no external API needed); LLM uses Deepseek V4 Flash
+Agentic AI Portfolio & Admin Platform for Muhammad Hassaan Khan — a Next.js 16 (App Router) + TypeScript application with Supabase (PostgreSQL + Auth + pgvector) and a Deepseek V4 Flash AI assistant (RAG-based). Built using Spec-Driven Development (SDD).
 
 ## Project Docs
 - `ROADMAP.md` — Full project roadmap with all phases, features, and goals
@@ -21,98 +10,84 @@ Agentic AI Portfolio & Admin Platform for Muhammad Hassaan Khan — a Next.js 16
 - `SPECS.md` — Original project specification
 
 ## Commands
-
-### Development
 ```bash
 npm run dev              # Start dev server on localhost:3000
 npm run build            # Production build (use NODE_OPTIONS='--max-old-space-size=2048')
 npm run lint             # ESLint
-npm run type-check       # Add to scripts if needed: tsc --noEmit (type-checking happens during build)
 ```
 
-### Database (requires Supabase CLI + Docker)
-```bash
-npx supabase start      # Start local Supabase stack
-npx supabase link       # Link to remote Supabase project
-npx supabase db push    # Push schema changes
+## Architecture
+```
+Public Routes:     /  /services  /services/[slug]  /projects  /about
+Auth Routes:       /login  /register
+Client Portal:     /dashboard/* (orders, projects, messages, files, payments)
+Admin Panel:       /admin/* (dashboard, analytics, gigs, projects, clients, orders)
+API Routes:        28 routes across client, admin, public, and AI
 ```
 
-## Code Architecture
-
-### Directory structure
+## Directory Structure
 ```
 src/
-  app/                         # Next.js App Router
-    layout.tsx                  # Root layout (Geist font, global styles)
-    page.tsx                    # Home page (hero + AI chat widget)
-    projects/page.tsx           # Public project list (server component, reads Supabase)
+  app/                          # Next.js App Router
+    page.tsx                    # Home page (hero + services + testimonials + AI chat)
+    services/page.tsx           # Gig listing with package tiers
+    services/[slug]/page.tsx    # Gig detail with package comparison
+    projects/page.tsx           # Portfolio projects (server component)
     about/page.tsx              # Bio/skills/education from Supabase
-    admin/
-      layout.tsx                # Auth guard wrapper (redirects to /admin/login if unauthed)
-      login/page.tsx            # Supabase Auth sign-in form
-      dashboard/page.tsx        # Stats overview (project count, profile sections, chat logs)
-      projects/page.tsx         # Full CRUD for projects (client component)
-      profile/page.tsx          # Edit bio/skills/education/experience (client component)
-      ai-logs/page.tsx          # Monitor visitor AI chat queries (server component)
-    api/
-      ai/route.ts               # POST: embed query → RAG → Deepseek → log → respond
-      admin/projects/route.ts   # CRUD: GET/POST/PUT/DELETE (auto-indexes embeddings on change)
-      admin/profile/route.ts    # CRUD: GET/POST/PUT/DELETE (auto-indexes embeddings on change)
-      admin/embeddings/route.ts # POST: manually trigger re-indexing for a project or profile
-  proxy.ts                      # Next.js 16 proxy (previously middleware)
+    (auth)/                     # Login + register pages
+    dashboard/                  # Client portal (orders, projects, messages)
+    admin/                      # Full admin panel
+    api/                        # 28 API routes
   components/
     ui/                         # Button, Card, Input, Textarea
-    ai/ChatWidget.tsx           # Interactive chat widget (client component)
-    admin/
-      AuthGuard.tsx             # Session check, redirects to login if unauthenticated
-      AdminNav.tsx              # Admin nav bar with sign-out button
-    Nav.tsx                     # Public nav bar (Home, Projects, About)
+    ai/ChatWidget.tsx           # AI chat widget
+    admin/                      # AdminNav, AuthGuard, FeatureTemplatePicker
+    client/                     # DashboardNav, ClientAuthGuard, MilestoneList,
+                                # ProjectMessages, ProjectFiles, ProjectTimeline,
+                                # KanbanBoard, TimeTracking, PaymentSection,
+                                # ExtensionRequestSection, StatusBadge, etc.
+    Nav.tsx, Footer.tsx         # Public navigation + footer
+    ThemeProvider.tsx            # Dark/light theme toggle
+    ProjectCard.tsx             # Portfolio project card
   lib/
-    supabase/
-      client.ts                 # Browser Supabase client (public anon key)
-      server.ts                 # Server-component Supabase client (cookies-based auth)
-      admin.ts                  # Service-role client (bypasses RLS, for CRUD API routes)
-    ai/
-      deepseek.ts               # Deepseek API wrapper: chat + embedding + batch embedding
-      rag.ts                    # RAG pipeline: embed query → vector search → context → LLM
-    rate-limit.ts               # Rate limiter querying ai_chat_logs table
-  types/
-    database.ts                 # TypeScript interfaces for all 5 tables
-supabase/
-  migrations/
-    00001_schema.sql            # 5 tables + RLS policies
-    00002_vector_search_rpcs.sql # match_project_embeddings + match_profile_embeddings RPCs
-.env.local                      # Template for Supabase + Deepseek keys
+    supabase/client.ts          # Browser Supabase client
+    supabase/server.ts          # Server-component Supabase client
+    supabase/admin.ts           # Service-role client (bypasses RLS)
+    ai/deepseek.ts              # Deepseek API wrapper
+    ai/rag.ts                   # RAG pipeline + system prompt
+    ai/search.ts                # Keyword search
+    services.ts                 # Service definitions
+    project-penalties.ts        # Late fee calculator
+    rate-limit.ts               # Rate limiter (ai_chat_logs table)
+  types/database.ts             # All TypeScript interfaces
 ```
 
-### Key patterns
+## Key Patterns
+- **Supabase clients**: anon (browser), server (cookies), admin (service_role)
+- **Admin API routes** use `createAdminClient()` (server-side, bypasses RLS)
+- **Client API routes** use `createClient()` (browser anon key + RLS)
+- **Admin pages** fetch data via API routes (not direct Supabase queries)
+- **Theme**: CSS variables (`--accent`, `--surface`, `--border`, etc.) with rose/crimson accent
+- **Gradient accent**: `<span className="gradient-text">...</span>`
 
-**Supabase clients — three tiers:**
-1. `lib/supabase/client.ts` — Anon key for browser. Used in AuthGuard and AdminNav (client components).
-2. `lib/supabase/server.ts` — Server-component client via cookies. Available for server components but not currently used directly (admin API routes use service_role client).
-3. `lib/supabase/admin.ts` — Service-role key, bypasses RLS. Used in API routes and server components (projects page, about page, dashboard, ai-logs).
+## Database (17 tables)
+```
+core:         projects, project_embeddings, profile_content, profile_embeddings
+chat:         ai_chat_logs, service_orders
+portal:       profiles, client_orders, portal_projects, project_milestones,
+              project_messages, project_files, project_timeline_events,
+              extension_requests, payments
+features:     notifications, testimonials, time_logs, gigs, gig_packages,
+              gig_feature_templates
+```
 
-**Vector sync on content change:** When admin creates/updates a project or profile section via the API, the route handler automatically chunks the content, generates embeddings via Deepseek, and upserts into the corresponding `*_embeddings` table with CASCADE delete for old embeddings.
+## AI Assistant
+- Keyword search → Deepseek V4 Flash → response
+- Rate limited: 20 msg/IP/hr via ai_chat_logs
+- Knows about services, pricing, and order process
+- Read-only — no tool calls, no admin actions
 
-**AI assistant pipeline:** API route `/api/ai` → rate limit check → `deepseek-embedding` on query → `match_*_embeddings` RPCs → build context → `deepseek-chat` (V4 Flash) with hardened system prompt → log to `ai_chat_logs` → respond.
-
-### Data model (5 tables — see `supabase/migrations/00001_schema.sql`)
-
-| Table | Vector | Purpose |
-|---|---|---|
-| `projects` | — | Portfolio projects (title, description, tech_stack[], github_url) |
-| `project_embeddings` | vector(2048) | Chunked embeddings per project, FK→projects CASCADE |
-| `profile_content` | — | Bio/skills/education/experience/certifications sections |
-| `profile_embeddings` | vector(2048) | Chunked embeddings per section, FK→profile_content CASCADE |
-| `ai_chat_logs` | — | Visitor chat history + ip_address for rate limiting |
-
-### Constraints (from SPECS.md §7)
-- AI assistant is **read-only** — no tool calls, no admin actions via chat
-- If RAG context doesn't cover the question, the AI must **politely decline**
-- System prompt is **server-side only** (in `rag.ts`), never sent to client
-- No heavy local processing or local LLMs
-
-## Environment Variables (`.env.local`)
+## Environment Variables
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
