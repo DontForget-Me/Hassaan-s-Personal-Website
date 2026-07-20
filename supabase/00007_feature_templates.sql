@@ -106,50 +106,182 @@ INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALU
   ('ai-integration', 'premium', 'Priority 24/7 Support', 9),
   ('ai-integration', 'premium', '30 Days Post-Launch Support', 10);
 
--- ===== BACKEND & APIs =====
+-- ===== BACKEND & API DEVELOPMENT =====
 -- Basic
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
-  ('backend-apis', 'basic', 'RESTful API Design', 1),
-  ('backend-apis', 'basic', 'Basic Documentation', 2),
-  ('backend-apis', 'basic', 'Standard Hosting Setup', 3),
-  ('backend-apis', 'basic', 'Email Support', 4),
-  ('backend-apis', 'basic', '3 Endpoints', 5);
+  ('backend-apis', 'basic', 'RESTful API Design & Development', 1),
+  ('backend-apis', 'basic', 'API Documentation (Swagger/OpenAPI)', 2),
+  ('backend-apis', 'basic', '3 Custom API Endpoints', 3),
+  ('backend-apis', 'basic', 'Basic Data Validation', 4),
+  ('backend-apis', 'basic', 'Standard Hosting Setup', 5),
+  ('backend-apis', 'basic', 'Email Support', 6),
+  ('backend-apis', 'basic', '1 Revision Round', 7),
+  ('backend-apis', 'basic', '7 Days Delivery', 8);
 -- Standard
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
   ('backend-apis', 'standard', 'Everything in Basic', 1),
-  ('backend-apis', 'standard', 'Database Schema Design', 2),
-  ('backend-apis', 'standard', 'Auth Integration', 3),
-  ('backend-apis', 'standard', 'API Testing Suite', 4),
-  ('backend-apis', 'standard', 'Performance Optimization', 5),
-  ('backend-apis', 'standard', '10 Endpoints', 6);
+  ('backend-apis', 'standard', '10 Custom API Endpoints', 2),
+  ('backend-apis', 'standard', 'Database Schema Design (PostgreSQL/Supabase)', 3),
+  ('backend-apis', 'standard', 'User Authentication (JWT / OAuth)', 4),
+  ('backend-apis', 'standard', 'Role-based Access Control', 5),
+  ('backend-apis', 'standard', 'API Testing Suite (Unit + Integration)', 6),
+  ('backend-apis', 'standard', 'Error Handling & Logging', 7),
+  ('backend-apis', 'standard', 'Performance Optimization', 8),
+  ('backend-apis', 'standard', '3 Revision Rounds', 9),
+  ('backend-apis', 'standard', '14 Days Delivery', 10);
 -- Premium
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
   ('backend-apis', 'premium', 'Everything in Standard', 1),
-  ('backend-apis', 'premium', 'Microservices Architecture', 2),
-  ('backend-apis', 'premium', 'CI/CD Pipeline', 3),
-  ('backend-apis', 'premium', 'Security Audit', 4),
-  ('backend-apis', 'premium', 'Dedicated Support', 5),
-  ('backend-apis', 'premium', 'Unlimited Endpoints', 6);
+  ('backend-apis', 'premium', 'Unlimited API Endpoints', 2),
+  ('backend-apis', 'premium', 'Microservices Architecture Design', 3),
+  ('backend-apis', 'premium', 'CI/CD Pipeline (GitHub Actions)', 4),
+  ('backend-apis', 'premium', 'Security Audit & Penetration Testing', 5),
+  ('backend-apis', 'premium', 'Rate Limiting & Caching (Redis)', 6),
+  ('backend-apis', 'premium', 'Webhook Integrations', 7),
+  ('backend-apis', 'premium', 'Cloud Deployment (AWS / Docker / Vercel)', 8),
+  ('backend-apis', 'premium', 'Database Migration & Optimization', 9),
+  ('backend-apis', 'premium', 'Dedicated Support & SLA', 10),
+  ('backend-apis', 'premium', '30 Days Post-Launch Support', 11);
 
--- ===== CONSULTING =====
+-- ===== TECHNICAL CONSULTING =====
 -- Basic
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
-  ('consulting', 'basic', '1-hour Consultation Call', 1),
-  ('consulting', 'basic', 'High-level Review', 2),
-  ('consulting', 'basic', 'Summary Report', 3),
-  ('consulting', 'basic', 'Email Follow-up', 4);
+  ('consulting', 'basic', '1-hour Video Consultation Call', 1),
+  ('consulting', 'basic', 'High-level Project Review', 2),
+  ('consulting', 'basic', 'Summary Report with Findings', 3),
+  ('consulting', 'basic', 'Email Follow-up', 4),
+  ('consulting', 'basic', 'Technology Stack Recommendations', 5),
+  ('consulting', 'basic', '5 Days Delivery', 6);
 -- Standard
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
   ('consulting', 'standard', 'Everything in Basic', 1),
-  ('consulting', 'standard', 'Code Review', 2),
-  ('consulting', 'standard', 'Architecture Assessment', 3),
-  ('consulting', 'standard', 'Recommendations Document', 4),
-  ('consulting', 'standard', '30-min Follow-up Call', 5);
+  ('consulting', 'standard', 'Full Code Review (Up to 10 Files)', 2),
+  ('consulting', 'standard', 'Architecture Assessment & Diagram', 3),
+  ('consulting', 'standard', 'Detailed Recommendations Document', 4),
+  ('consulting', 'standard', '30-min Follow-up Call', 5),
+  ('consulting', 'standard', 'Performance Bottleneck Analysis', 6),
+  ('consulting', 'standard', 'Security Vulnerability Scan', 7),
+  ('consulting', 'standard', '10 Days Delivery', 8);
 -- Premium
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
   ('consulting', 'premium', 'Everything in Standard', 1),
-  ('consulting', 'premium', 'Full Audit Report', 2),
-  ('consulting', 'premium', 'Implementation Plan', 3),
-  ('consulting', 'premium', '2 Weeks Support', 4),
-  ('consulting', 'premium', 'Priority Access', 5),
-  ('consulting', 'premium', 'Monthly Check-in', 6);
+  ('consulting', 'premium', 'Complete System Audit Report', 2),
+  ('consulting', 'premium', 'Step-by-Step Implementation Plan', 3),
+  ('consulting', 'premium', 'Database Schema Review & Optimization', 4),
+  ('consulting', 'premium', 'CI/CD Pipeline Recommendations', 5),
+  ('consulting', 'premium', '2 Weeks Priority Support', 6),
+  ('consulting', 'premium', 'Monthly Check-in (3 Months)', 7),
+  ('consulting', 'premium', '15 Days Delivery', 8);
+
+-- ===== UI/UX DESIGN =====
+-- Basic
+INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
+  ('ui-ux-design', 'basic', '3 Screen/Page Designs', 1),
+  ('ui-ux-design', 'basic', 'Wireframing (Low Fidelity)', 2),
+  ('ui-ux-design', 'basic', 'Color Palette Selection', 3),
+  ('ui-ux-design', 'basic', 'Typography Selection', 4),
+  ('ui-ux-design', 'basic', 'Basic Prototype (Clickable)', 5),
+  ('ui-ux-design', 'basic', 'Figma Source File', 6),
+  ('ui-ux-design', 'basic', '2 Revision Rounds', 7),
+  ('ui-ux-design', 'basic', '5 Days Delivery', 8);
+-- Standard
+INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
+  ('ui-ux-design', 'standard', 'Everything in Basic', 1),
+  ('ui-ux-design', 'standard', '6 Screen/Page Designs', 2),
+  ('ui-ux-design', 'standard', 'Interactive High-Fidelity Prototype', 3),
+  ('ui-ux-design', 'standard', 'Responsive Design (Mobile + Tablet + Desktop)', 4),
+  ('ui-ux-design', 'standard', 'UI Kit / Component Library', 5),
+  ('ui-ux-design', 'standard', 'User Flow Diagram', 6),
+  ('ui-ux-design', 'standard', 'Design System Foundation', 7),
+  ('ui-ux-design', 'standard', '4 Revision Rounds', 8),
+  ('ui-ux-design', 'standard', '10 Days Delivery', 9);
+-- Premium
+INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
+  ('ui-ux-design', 'premium', 'Everything in Standard', 1),
+  ('ui-ux-design', 'premium', '12+ Screen/Page Designs', 2),
+  ('ui-ux-design', 'premium', 'Full Design System (Colors + Typography + Components)', 3),
+  ('ui-ux-design', 'premium', 'Micro-interactions & Animations', 4),
+  ('ui-ux-design', 'premium', 'User Research & Persona Development', 5),
+  ('ui-ux-design', 'premium', 'Usability Testing Report', 6),
+  ('ui-ux-design', 'premium', 'Handoff Package (Developer-ready Specs)', 7),
+  ('ui-ux-design', 'premium', 'HTML/CSS Conversion of Design', 8),
+  ('ui-ux-design', 'premium', 'Unlimited Revisions', 9),
+  ('ui-ux-design', 'premium', '14 Days Delivery', 10);
+
+-- ===== MOBILE APP DEVELOPMENT =====
+-- Basic
+INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
+  ('mobile-app-development', 'basic', 'Single Platform (iOS OR Android)', 1),
+  ('mobile-app-development', 'basic', '3 App Screens', 2),
+  ('mobile-app-development', 'basic', 'Basic UI Implementation', 3),
+  ('mobile-app-development', 'basic', 'Navigation Setup', 4),
+  ('mobile-app-development', 'basic', 'App Icon & Splash Screen', 5),
+  ('mobile-app-development', 'basic', '1 Revision Round', 6),
+  ('mobile-app-development', 'basic', 'Source Code Delivery', 7),
+  ('mobile-app-development', 'basic', '14 Days Delivery', 8);
+-- Standard
+INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
+  ('mobile-app-development', 'standard', 'Everything in Basic', 1),
+  ('mobile-app-development', 'standard', 'Cross-Platform (iOS + Android via React Native/Flutter)', 2),
+  ('mobile-app-development', 'standard', '8 App Screens', 3),
+  ('mobile-app-development', 'standard', 'REST API Integration', 4),
+  ('mobile-app-development', 'standard', 'User Authentication (Sign Up / Login)', 5),
+  ('mobile-app-development', 'standard', 'Database Integration (Firebase/Supabase)', 6),
+  ('mobile-app-development', 'standard', 'Push Notifications', 7),
+  ('mobile-app-development', 'standard', 'Custom UI Components', 8),
+  ('mobile-app-development', 'standard', '3 Revision Rounds', 9),
+  ('mobile-app-development', 'standard', '21 Days Delivery', 10);
+-- Premium
+INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
+  ('mobile-app-development', 'premium', 'Everything in Standard', 1),
+  ('mobile-app-development', 'premium', 'Both Platforms (iOS + Android)', 2),
+  ('mobile-app-development', 'premium', 'Full App (Unlimited Screens)', 3),
+  ('mobile-app-development', 'premium', 'Backend API Development', 4),
+  ('mobile-app-development', 'premium', 'In-app Purchases / Subscription', 5),
+  ('mobile-app-development', 'premium', 'Real-time Features (Chat / Live Updates)', 6),
+  ('mobile-app-development', 'premium', 'Third-party SDK Integration', 7),
+  ('mobile-app-development', 'premium', 'App Store & Play Store Submission', 8),
+  ('mobile-app-development', 'premium', 'Analytics & Crash Reporting', 9),
+  ('mobile-app-development', 'premium', '5 Revision Rounds', 10),
+  ('mobile-app-development', 'premium', '30 Days Post-Launch Support', 11),
+  ('mobile-app-development', 'premium', '30 Days Delivery', 12);
+
+-- ===== FULL STACK DEVELOPMENT =====
+-- Basic
+INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
+  ('full-stack-development', 'basic', 'Simple CRUD Web Application', 1),
+  ('full-stack-development', 'basic', '2 Pages (List + Detail)', 2),
+  ('full-stack-development', 'basic', 'Basic REST API', 3),
+  ('full-stack-development', 'basic', 'Database Setup (PostgreSQL/Supabase)', 4),
+  ('full-stack-development', 'basic', 'Responsive Frontend (React/Next.js)', 5),
+  ('full-stack-development', 'basic', 'Source Code on GitHub', 6),
+  ('full-stack-development', 'basic', '1 Revision Round', 7),
+  ('full-stack-development', 'basic', '14 Days Delivery', 8);
+-- Standard
+INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
+  ('full-stack-development', 'standard', 'Everything in Basic', 1),
+  ('full-stack-development', 'standard', 'Multi-page Web Application (Up to 8 Pages)', 2),
+  ('full-stack-development', 'standard', 'User Authentication & Authorization', 3),
+  ('full-stack-development', 'standard', 'Admin Dashboard with Analytics', 4),
+  ('full-stack-development', 'standard', 'Third-party API Integration', 5),
+  ('full-stack-development', 'standard', 'File Upload & Management', 6),
+  ('full-stack-development', 'standard', 'Email Notifications (SendGrid/Resend)', 7),
+  ('full-stack-development', 'standard', 'Database Schema Design & Migrations', 8),
+  ('full-stack-development', 'standard', 'Cloud Deployment (Vercel/Railway)', 9),
+  ('full-stack-development', 'standard', '3 Revision Rounds', 10),
+  ('full-stack-development', 'standard', '21 Days Delivery', 11);
+-- Premium
+INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
+  ('full-stack-development', 'premium', 'Everything in Standard', 1),
+  ('full-stack-development', 'premium', 'Full SaaS / Enterprise Platform', 2),
+  ('full-stack-development', 'premium', 'Custom Dashboard with Data Visualization', 3),
+  ('full-stack-development', 'premium', 'AI/ML Feature Integration', 4),
+  ('full-stack-development', 'premium', 'Real-time Features (WebSockets)', 5),
+  ('full-stack-development', 'premium', 'Multi-tenant Architecture', 6),
+  ('full-stack-development', 'premium', 'CI/CD Pipeline (GitHub Actions)', 7),
+  ('full-stack-development', 'premium', 'Performance Optimization & Caching', 8),
+  ('full-stack-development', 'premium', 'Comprehensive Testing Suite', 9),
+  ('full-stack-development', 'premium', 'Post-Launch Monitoring Setup', 10),
+  ('full-stack-development', 'premium', '30 Days Priority Support', 11),
+  ('full-stack-development', 'premium', '5 Revision Rounds', 12),
+  ('full-stack-development', 'premium', '30 Days Delivery', 13);
