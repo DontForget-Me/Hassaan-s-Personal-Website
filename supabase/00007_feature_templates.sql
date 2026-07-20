@@ -28,36 +28,49 @@ CREATE INDEX IF NOT EXISTS idx_ft_tier ON gig_feature_templates(tier);
 -- Clear and reseed (safe re-run)
 DELETE FROM gig_feature_templates;
 
--- ===== WEB DEVELOPMENT =====
--- Basic
+-- ===== WEB / FULL STACK DEVELOPMENT =====
+-- Basic (starter package — single page / landing page)
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
-  ('web-development', 'basic', 'Responsive Design', 1),
-  ('web-development', 'basic', 'Up to 5 Pages', 2),
-  ('web-development', 'basic', 'Contact Form', 3),
-  ('web-development', 'basic', 'Basic SEO Setup', 4),
-  ('web-development', 'basic', 'Mobile Friendly', 5),
-  ('web-development', 'basic', '1 Revision', 6),
-  ('web-development', 'basic', '7 Days Delivery', 7);
--- Standard
+  ('web-development', 'basic', 'Responsive Design (Mobile + Tablet + Desktop)', 1),
+  ('web-development', 'basic', '1 Page / Landing Page', 2),
+  ('web-development', 'basic', 'Contact Form Integration', 3),
+  ('web-development', 'basic', 'Basic SEO (Meta Tags + Keywords)', 4),
+  ('web-development', 'basic', 'Mobile-Friendly Layout', 5),
+  ('web-development', 'basic', 'Google Maps Integration', 6),
+  ('web-development', 'basic', 'Social Media Links', 7),
+  ('web-development', 'basic', '1 Revision Round', 8),
+  ('web-development', 'basic', 'Source Code Delivery', 9),
+  ('web-development', 'basic', '7 Days Delivery', 10);
+-- Standard (multi-page business website)
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
   ('web-development', 'standard', 'Everything in Basic', 1),
   ('web-development', 'standard', 'Up to 10 Pages', 2),
-  ('web-development', 'standard', 'Advanced SEO', 3),
-  ('web-development', 'standard', 'API Integration', 4),
-  ('web-development', 'standard', 'CMS Integration', 5),
-  ('web-development', 'standard', 'Admin Dashboard', 6),
-  ('web-development', 'standard', '3 Revisions', 7),
-  ('web-development', 'standard', 'Payment Gateway', 8);
--- Premium
+  ('web-development', 'standard', 'Custom UI/UX Design', 3),
+  ('web-development', 'standard', 'Advanced SEO (Schema + Sitemap + Analytics)', 4),
+  ('web-development', 'standard', 'REST API Integration', 5),
+  ('web-development', 'standard', 'CMS Integration (WordPress / Sanity / Strapi)', 6),
+  ('web-development', 'standard', 'Admin Dashboard', 7),
+  ('web-development', 'standard', 'Payment Gateway (Stripe / PayPal)', 8),
+  ('web-development', 'standard', 'User Authentication (Sign Up / Login)', 9),
+  ('web-development', 'standard', 'Database Setup (PostgreSQL / Supabase)', 10),
+  ('web-development', 'standard', '3 Revision Rounds', 11),
+  ('web-development', 'standard', '14 Days Delivery', 12);
+-- Premium (full-stack SaaS / e-commerce platform)
 INSERT INTO gig_feature_templates (service_type, tier, feature, sort_order) VALUES
   ('web-development', 'premium', 'Everything in Standard', 1),
   ('web-development', 'premium', 'Unlimited Pages', 2),
-  ('web-development', 'premium', 'E-commerce Ready', 3),
-  ('web-development', 'premium', 'Custom Animations', 4),
-  ('web-development', 'premium', 'Performance Optimization', 5),
-  ('web-development', 'premium', 'Priority Support', 6),
-  ('web-development', 'premium', '5 Revisions', 7),
-  ('web-development', 'premium', 'SLA Guarantee', 8);
+  ('web-development', 'premium', 'E-commerce / Marketplace Ready', 3),
+  ('web-development', 'premium', 'Custom Animations & Interactions', 4),
+  ('web-development', 'premium', 'Performance Optimization (Core Web Vitals)', 5),
+  ('web-development', 'premium', 'Third-Party API Integrations (as needed)', 6),
+  ('web-development', 'premium', 'Multi-language / i18n Support', 7),
+  ('web-development', 'premium', 'Role-based Access Control (RBAC)', 8),
+  ('web-development', 'premium', 'CI/CD Pipeline Setup', 9),
+  ('web-development', 'premium', 'Cloud Deployment (Vercel / AWS / Docker)', 10),
+  ('web-development', 'premium', 'SSL + Custom Domain Setup', 11),
+  ('web-development', 'premium', 'Post-Launch Support (30 Days)', 12),
+  ('web-development', 'premium', '5 Revision Rounds', 13),
+  ('web-development', 'premium', 'Priority 24/7 Support', 14);
 
 -- ===== AI INTEGRATION =====
 -- Basic
